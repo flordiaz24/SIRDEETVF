@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Bitacora de campo</ui:define>
+
+    <ui:define name="content">
+        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+            <h2>Bitacora de campo</h2>
+
+        </p:panelGrid>
+
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            
+              <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+              <p:dataTable emptyMessage="No se han encontrado registros" widgetVar="tabla"  value="#{MbPersona.lista_personas()}" id="x" var="persona" 
+                           paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+              
+              
+              </p:dataTable>
+            
+        </h:form>
+    </ui:define>
+</ui:composition>    

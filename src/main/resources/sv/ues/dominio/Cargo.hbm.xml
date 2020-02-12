@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Cargo" table="cargo" schema="public" optimistic-lock="version">
+        <id name="idCargo" type="int">
+            <column name="id_cargo" />
+            <generator class="identity" />
+        </id>
+        <property name="cargo" type="string">
+            <column name="cargo" length="200" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="200" />
+        </property>
+        <property name="fechaCreacion" type="timestamp">
+            <column name="fecha_creacion" length="29" />
+        </property>
+        <property name="fechaModifica" type="timestamp">
+            <column name="fecha_modifica" length="29" />
+        </property>
+        <property name="activo" type="boolean">
+            <column name="activo" length="29" />
+        </property>
+        <set name="usuarios" table="usuario" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_cargo" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Usuario" />
+        </set>
+    </class>
+</hibernate-mapping>

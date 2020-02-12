@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Animal" table="animal" schema="public" optimistic-lock="version">
+        <id name="idAnimal" type="int">
+            <column name="id_animal" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="analisisLab" class="sv.ues.dominio.AnalisisLab" fetch="select">
+            <column name="id_analisis" not-null="true" />
+        </many-to-one>
+        <many-to-one name="catalogoAnima" class="sv.ues.dominio.CatalogoAnima" fetch="select">
+            <column name="id_cat_animal" not-null="true" />
+        </many-to-one>
+        <property name="estadoAnimal" type="java.lang.Boolean">
+            <column name="estado_animal" />
+        </property>
+    </class>
+</hibernate-mapping>

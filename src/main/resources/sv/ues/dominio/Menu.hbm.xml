@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Menu" table="menu" schema="public" optimistic-lock="version">
+        <id name="idMenu" type="int">
+            <column name="id_menu" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="menu" class="sv.ues.dominio.Menu" fetch="select">
+            <column name="men_id_menu" />
+        </many-to-one>
+        <property name="nomMenu" type="string">
+            <column name="nom_menu" length="150" not-null="true" />
+        </property>
+        <property name="ruta" type="string">
+            <column name="ruta" length="200" />
+        </property>
+        <property name="icono" type="string">
+            <column name="icono" length="150" />
+        </property>
+        <property name="orden" type="java.lang.Integer">
+            <column name="orden" />
+        </property>
+        <property name="disponible" type="java.lang.Boolean">
+            <column name="disponible" />
+        </property>
+        <set name="menus" table="menu" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="men_id_menu" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Menu" />
+        </set>
+        <set name="permisos" table="menu_permiso" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="id_menu" not-null="true" />
+            </key>
+            <many-to-many entity-name="sv.ues.dominio.Permiso">
+                <column name="id_permiso" not-null="true" />
+            </many-to-many>
+        </set>
+        
+        
+        <set name="rols" table="rol_menu" inverse="false" fetch="select" lazy="false">
+            <key>
+                <column name="id_menu" not-null="false" />
+            </key>
+            <many-to-many entity-name="sv.ues.dominio.Rol">
+                <column name="id_rol" not-null="true" />
+            </many-to-many>
+        </set>
+        
+        
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestion roles</ui:define>
+
+    <ui:define name="content">
+<!-- INICIO FORMULARIO REGISTRAR ROL -->
+        <h:form id="preservanteCreacion">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel header="Preservantes">
+                <h:panelGrid columns="1" cellpadding="2" width="95% !important">
+                    <p:outputLabel value="Nombre preservante" />
+                    <p:inputTextarea value="#{MbPreservante.preservante.nomPreservante}" cols="50" rows="1" maxlength="25">
+                        <p:keyFilter regEx="/[a-zA-Z]/i" />
+                    </p:inputTextarea>
+                    <p:outputLabel value="Descripcion" />
+                    <p:inputTextarea value="#{MbPreservante.preservante.descPreservante}" maxlength="500" cols="50" autoResize="true">
+                        <p:keyFilter regEx="/[a-zA-Z0-9 ]/i" />
+                    </p:inputTextarea>
+                </h:panelGrid>
+                <br/><br/><br/>
+                <p:commandButton class="secondary-btn" update="mensaje" value="Registrar preservante" actionListener="#{MbPreservante.registrar()}" ajax="true" icon="ui-icon-plus" />
+                <br/>
+            </p:panel>
+        </h:form>
+<!-- FIN FORMULARIO REGISTRAR ROL -->
+        <br/>
+        <br/>
+<!-- INICIO FORMULARIO ROLES REGISTRADOS -->
+        <h:form id="preservantesResgistrados">
+            <p:dataTable value="#{MbPreservante.lista_preservante()}" id="x" var="preservante" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                <f:facet name="header">
+                    Preservantes registrados
+                </f:facet>
+                <p:column headerText="ID">
+                    <h:outputText value="#{preservante.idPreservante}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{preservante.nomPreservante}" />
+                </p:column>
+                <p:column headerText="Descripcion">
+                    <h:outputText value="#{preservante.descPreservante}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <div align="center">
+                        <p:commandButton value="Eliminar" class="red-btn" actionListener="#{MbPreservante.setSelected(preservante)}" oncomplete="PF('dialogoEliminar').show();" update="formulario_eliminar:dlg" />
+                        <p:spacer height="10" width="10" />
+                        <p:commandButton value="Editar" class="orange-btn" actionListener="#{MbPreservante.modificar(preservante)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod" />
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+<!-- FIN FORMULARIO ROLES REGISTRADOS -->
+
+<!-- INICIO FORMULARIO ELIMINAR ROL -->
+        <h:form id="formulario_eliminar">
+            <p:dialog header="Eliminar" styleClass="" widgetVar="dialogoEliminar" id="dlg" resizable="false" modal="true">
+                <p:panel rendered="#{not empty MbPreservante.selectedPreservante}" id="panel_eliminar" style="border: none !important;">
+                    <div align="center">
+                        <p>Todos los datos se perderan y no podra recuperarlos.</p>
+                        <p>
+                            <p:commandButton class="secondary-btn" onclick="PF('dialogoEliminar').hide();" ajax="true" value="Cancelar" />
+                            <p:spacer height="10" width="10" />
+                            <p:commandButton class="red-btn" actionListener="#{MbPreservante.eliminarDialog()}" ajax="true" value="Eliminar" update="preservanteCreacion:mensaje" />
+                        </p>
+                    </div>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+<!-- FIN FORMULARIO ELIMINAR ROL -->
+
+<!-- INICIO FORMULARIO MODIFICAR ROL -->
+        <h:form id="formulario_modificar">
+            <p:dialog header="Modificar" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true">
+                <p:panel style="border: none !important;" rendered="#{not empty MbPreservante.selectedPreservante}" id="panel_modificar">
+                    <p:outputLabel value="Nombre:" />
+                    <br/>
+                    <p:inputTextarea value="#{MbPreservante.selectedPreservante.nomPreservante}" cols="50" rows="1" maxlength="25">
+                        <p:keyFilter regEx="/[a-zA-Z]/i" />
+                    </p:inputTextarea>
+                    <br/>
+                    <br/>
+                    <p:outputLabel value="Descripcion" />
+                    <br/>
+                    <p:inputTextarea value="#{MbPreservante.selectedPreservante.descPreservante}" maxlength="500" cols="50" autoResize="true">
+                        <p:keyFilter regEx="/[a-zA-Z0-9 ]/i" />
+                    </p:inputTextarea>
+                    <br/><br/>
+                    <div align="center">
+                        <p>
+                            <p:commandButton class="secondary-btn" onclick="PF('dialogoModificar').hide();" ajax="true" value="Cancelar" />
+                            <p:spacer height="10" width="10" />
+                            <p:commandButton class="orange-btn" actionListener="#{MbPreservante.modificarDialog()}" ajax="true" value="Modificar" update="preservanteCreacion:mensaje" />
+                        </p>
+                    </div>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+<!-- FIN FORMULARIO ELIMINAR ROL -->
+
+<!-- INICIO DIALOGO DEFAULT -->
+    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+        Procesando...
+    </p:dialog>
+<!-- FIN DIALOGO DEFAULT -->
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Tratamiento" table="tratamiento" schema="public" optimistic-lock="version">
+        <id name="idTratamiento" type="int">
+            <column name="id_tratamiento" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="analisisLab" class="sv.ues.dominio.AnalisisLab" fetch="select">
+            <column name="id_analisis" not-null="true" />
+        </many-to-one>
+        <property name="descTratamiento" type="string">
+            <column name="desc_tratamiento" length="500" not-null="true" />
+        </property>
+        <property name="resultadoTratamiento" type="string">
+            <column name="resultado_tratamiento" length="500" />
+        </property>
+        <property name="fechaTratamiento" type="date">
+            <column name="fecha_tratamiento" length="13" />
+        </property>
+    </class>
+</hibernate-mapping>

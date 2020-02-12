@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Registrar Pantalla</ui:define>
+
+    <ui:define name="content">
+<!-- INICIO FORMULARIO REGISTRAR ROL -->
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+            <p:panel header="Registrar pantalla"/>
+            <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbMenu.flujoResgistrar}">
+                    <p:tab id="general" title="Datos generales">
+                        <p:growl id="mensaje_general_registro" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+                        <p:panel>
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:outputLabel value="Nombre pantalla:" />
+                                <p:inputTextarea id="nombre" value="#{MbMenu.roles.nomMenu}" cols="50" rows="1" maxlength="25" required="true" requiredMessage="Debe digitar el nombre" validatorMessage="El nombre debe contener al menos 4 caracteres">
+                                    <f:validateLength minimum="4"/>
+                                    <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                </p:inputTextarea>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="confirmar" title="Confirmar">
+                        <p:panel>
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:outputLabel value="Nombre pantalla:" />
+                                <h:outputText value="#{MbMenu.roles.nomMenu}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <br/>
+                            <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('general',false)" style="float: right;" class="secondary-btn" update="mensaje" value="Registrar menu" actionListener="#{MbMenu.registrar()}" ajax="true" icon="ui-icon-plus" />
+                            <br/><br/>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            <p:blockUI block="F01" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+<!-- FIN FORMULARIO REGISTRAR ROL -->
+    </ui:define>
+</ui:composition>

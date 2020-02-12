@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestion Pantalla Rol</ui:define>
+
+    <ui:define name="content">
+        <h:form id="registros">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel header="Asignar pantallas a roles"/>
+            <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbRolPantalla.onFlowProcess}">
+               <p:tab id="personal" title="Seleccionar rol">
+                   <p:dataTable  widgetVar="tabla_usuario" value="#{MbRolPantalla.lista_roles()}" selection="#{MbRolPantalla.rol}" rowKey="#{rol.idRol}" id="x" var="rol" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <p:column headerText="Seleccion" selectionMode="single" style="width:70px;text-align:center" />
+                       <p:column headerText="Rol" filterBy="#{rol.nomRol}" filterMatchMode="contains">
+                        <h:outputText value="#{rol.nomRol}" />
+                    </p:column>
+                       <p:column headerText="Descripcion" filterBy="#{rol.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{rol.descripcion}" />
+                    </p:column>
+                   </p:dataTable>
+               </p:tab>
+                <p:tab id="roles" title="Seleccionar pantallas">
+                    <p:dataTable value="#{MbRolPantalla.lista_menu()}" widgetVar="tabla_rol" selection="#{MbRolPantalla.rolesSeleccionados}" rowKey="#{menu.idMenu}"  var="menu" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <p:column headerText="Seleccion" selectionMode="multiple" style="width:70px;text-align:center" />
+                    <p:column headerText="Nombre" filterBy="#{menu.nomMenu}" filterMatchMode="contains">
+                        <h:outputText value="#{menu.nomMenu}" />
+                    </p:column>
+                   </p:dataTable>
+               </p:tab>
+                
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel>
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Rol:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbRolPantalla.rol.nomRol}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Pantallas a asignar:"/>
+                            </p:column>
+                            <p:column >
+                                <ui:repeat value="#{MbRolPantalla.rolesPrevios}" var="roles">
+                                    <h:outputText value="#{roles.nomMenu}" style="font-weight: bold;"/> <br/>
+                                </ui:repeat>
+                            </p:column>
+                        </h:panelGrid>
+                        <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('personal',false)" actionListener="#{MbRolPantalla.asignarRoles()}" style="float: right;" class="secondary-btn" update="mensaje" value="Asignar" ajax="true" icon="ui-icon-plus" /> 
+                    <br/><br/>
+                    </p:panel>
+               </p:tab>
+                
+            </p:wizard>
+            <p:blockUI block="registros" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

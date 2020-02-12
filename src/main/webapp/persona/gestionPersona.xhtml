@@ -1,0 +1,414 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestion Persona</ui:define>
+
+    <ui:define name="content">
+        <h:form id="registros">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:dataTable emptyMessage="No se han encontrado registros" widgetVar="tabla"  value="#{MbPersona.lista_personas()}" id="x" var="persona" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                <f:facet name="header">
+                    Personas registradas
+                </f:facet>
+                <p:column headerText="Nombre" filterBy="#{persona.primerNombre} #{persona.segundoNombre} #{persona.primerApellido} #{persona.segundoApellido}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.primerNombre} #{persona.segundoNombre} #{persona.primerApellido} #{persona.segundoApellido}" />
+                </p:column>
+                <p:column headerText="DUI" filterBy="#{persona.dui}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.dui}" />
+                </p:column>
+                <p:column headerText="NIT" filterBy="#{persona.nit}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.nit}" />
+                </p:column>
+                <p:column headerText="Email" filterBy="#{persona.correoPersona}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.correoPersona}" />
+                </p:column>
+                <p:column headerText="Usuario" filterBy="#{persona.usuario.nomUsuario}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.usuario.nomUsuario}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <div align="center">
+                        <p:commandButton value="Consultar" class="blue-grey-btn" actionListener="#{MbPersona.setPersonaSeleccionada(persona)}" oncomplete="PF('dialogoConsultar').show();" update="formulario_consultar:dlg_consultar" />
+                        <p:spacer height="10" width="10" />
+                        <p:commandButton value="Modificar" class="orange-btn" actionListener="#{MbPersona.setPersonaSeleccionada(persona)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod" />
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+
+        <h:form id="formulario_consultar">
+            <p:dialog header="Persona registrada" widgetVar="dialogoConsultar" id="dlg_consultar" resizable="false" modal="true">
+                <p:scrollPanel  style="height: 400px;width: 1000px;">
+                    <p:panel header="Datos personales" id="panel_consultar">
+                        <h:panelGrid columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Primer nombre:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.primerNombre}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo nombre:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.segundoNombre}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Primer apellido:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.primerApellido}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo apellido:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.segundoApellido}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha de nacimiento:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText  value="#{MbPersona.personaSeleccionada.fechaNacimiento}" style="font-weight: bold;">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="DUI:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.dui}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="NIT:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.nit}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Domicilio">
+                            <h:panelGrid columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Departamento:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.municipio.departamento.nomDepto}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Codigo departamento:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.municipio.departamento.codDepto}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Municipio:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.municipio.nomMunicipio}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Codigo municipio:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.municipio.codMunicipio}" style="font-weight: bold;"/>
+                                </p:column>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Domicilio:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.direccionResidencia}" style="font-weight: bold;"/>
+                                </p:column>
+                            </h:panelGrid>
+                        </p:panel> 
+                        <p:panel header="Contacto">
+                                <h:panelGrid columns="4" cellpadding="10">
+                                    <p:column >
+                                        <h:outputText value="Email:"/>
+                                        <p:spacer height="10" width="10" />
+                                        <h:outputText value="#{MbPersona.personaSeleccionada.correoPersona}" style="font-weight: bold;"/>
+                                    </p:column>
+                                    <p:column >
+                                        <h:outputText value="Telefono:" />
+                                        <p:spacer height="10" width="10" />
+                                        <h:outputText value="#{MbPersona.personaSeleccionada.telefonoPersona}" style="font-weight: bold;"/>
+                                    </p:column>
+                                </h:panelGrid>
+                            </p:panel> 
+                <p:panel header="Credenciales">
+                    <h:panelGrid columns="3" cellpadding="10">
+                        <p:column >
+                            <h:outputText value="Usuario:"/>
+                            <p:spacer height="10" width="10" />
+                            <h:outputText value="#{MbPersona.personaSeleccionada.usuario.nomUsuario}" style="font-weight: bold;"/>
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="Rol/es:" />
+                            <p:spacer height="10" width="10" /><br/>
+                            <!--<h:outputText value="#{MbPersona.listarolesconsulta}" style="font-weight: bold;"/>-->
+                            <ui:repeat value="#{MbPersona.listaroles}" var="roles">
+                                <h:outputText value="#{roles.nomRol}" style="font-weight: bold;"/> <br/>
+                            </ui:repeat>
+                        </p:column>
+                         <p:column >
+                            <h:outputText value="Cargo:"/>
+                            <p:spacer height="10" width="10" />
+                            <h:outputText value="#{MbPersona.personaSeleccionada.usuario.cargo.cargo}" style="font-weight: bold;"/>
+                        </p:column>
+                    </h:panelGrid>
+                    
+                </p:panel> 
+                </p:scrollPanel >
+                
+                
+                <!--<div align="center">
+                    <p>
+                        <p:commandButton class="secondary-btn" onclick="PF('dialogoConsultar').hide();" ajax="true" value="Cerrar" />
+                    </p>
+                </div>-->
+            </p:dialog>
+        </h:form>
+
+        
+        <h:form id="formulario_modificar">
+            <p:growl id="mensaje_modificar_datos_personales" showDetail="true" sticky="false" life="4000"/>
+            <p:dialog style="margin-bottom: 22% !important;" header="Modificar" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true" onHide="PF('wiz').loadStep('personal',false)">
+                
+                <p:panel style="border: none !important;" id="panel_modificar" >
+                    <p:wizard widgetVar="wiz" id="registro" style="width: 1300px;" flowListener="#{MbPersona.flujoModificar}">
+               <p:tab id="personal" title="Datos personales" >
+                   <p:growl id="mensaje_personal" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                   <p:panel>
+                        <h:panelGrid columns="4" cellpadding="10">
+                          <p:column >
+                            <h:outputText value="Primer nombre:"/>
+                            <p:spacer height="10" width="10" />
+                            <p:inputText value="#{MbPersona.personaSeleccionada.primerNombre}" required="true" requiredMessage="Digite el primer nombre" maxlength="15" validatorMessage="El primer nombre debe contener al menos 5 caracteres">
+                                <f:validateLength minimum="3" />
+                                <p:keyFilter regEx="/[a-zA-Z]/i" />
+                            </p:inputText>
+                        </p:column>
+                            <p:column >
+                                    <h:outputText value="Segundo nombre:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbPersona.personaSeleccionada.segundoNombre}" maxlength="15" validatorMessage="El segundo nombre debe tener al menos 3 caracteres">
+                                        <f:validateLength minimum="3" />
+                                        <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Primer apellido:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbPersona.personaSeleccionada.primerApellido}" required="true" requiredMessage="Digite el primer apellido" maxlength="15" validatorMessage="El primer apellido debe tener al menos 3 caracteres">
+                                        <f:validateLength minimum="3" />    
+                                        <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo apellido:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbPersona.personaSeleccionada.segundoApellido}" maxlength="15" validatorMessage="El segundo apellido debe tener al menos 3 caracteres">
+                                        <f:validateLength minimum="3" />    
+                                        <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha de nacimiento:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:calendar mindate="#{MbPersona.minimafecha}" maxdate="#{MbPersona.maximafecha}" locale="es" navigator="true" value="#{MbPersona.personaSeleccionada.fechaNacimiento}" label="Fecha de nacimiento" pattern="dd-MM-yyyy" mask="true" required="true" requiredMessage="Fecha invalida"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="DUI:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputMask id="persona_dui" value="#{MbPersona.personaSeleccionada.dui}" mask="99999999-9" required="true" requiredMessage="DUI invalido"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="NIT:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputMask id="persona_nit" value="#{MbPersona.personaSeleccionada.nit}" mask="9999-999999-999-9" required="true" requiredMessage="NIT invalido"/>
+                                </p:column>
+                                <p:column >
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>  
+               </p:tab>
+                        
+                <p:tab id="domicilio" title="Domicilio">
+                    <p:growl id="mensaje_domicilio" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                    <p:panel>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:selectOneMenu id="coddepartamento" value="#{MbPersona.codigodepartamento}" required="true" requiredMessage="Seleccione el departamento">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbPersona.items_departamento}" />
+                                    <p:ajax update="coddepartamentotxt codmunicipio codmunicipiotxt" event="change" listener="#{MbPersona.resetCodigoMunicipio()}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel value="Codigo departamento:" />
+                                <p:inputMask  id="coddepartamentotxt" value="#{MbPersona.codigodepartamento}" mask="99" required="true" requiredMessage="Digite el codigo de departamento">
+                                    <p:ajax event="blur" update="coddepartamento codmunicipio codmunicipiotxt" listener="#{MbPersona.resetCodigoMunicipio()}"/>
+                                </p:inputMask>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:selectOneMenu id="codmunicipio" value="#{MbPersona.codigomunicipio}" required="true" requiredMessage="Seleccione el municipio">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbPersona.items_municipio}"/>
+                                    <p:ajax update="codmunicipiotxt" event="change" listener="#{MbPersona.asignarMunicipio()}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel value="Codigo municipio:" />
+                                <p:inputMask  id="codmunicipiotxt" value="#{MbPersona.codigomunicipio}" mask="999" required="true" requiredMessage="Digite el codigo de municipio">
+                                    <p:ajax event="blur" update="codmunicipio" listener="#{MbPersona.asignarMunicipio()}"/>
+                                </p:inputMask>
+                            </p:column>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Domicilio:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:inputTextarea maxlength="1000" value="#{MbPersona.personaSeleccionada.direccionResidencia}" cols="50" style="width: 450px" required="true" requiredMessage="Digite el domicilio" >
+                                    <p:keyFilter regEx="/[a-z0-9\.\#\,\:\; ]/i" />
+                                </p:inputTextarea>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                        
+                        
+                        
+                        <p:tab id="contacto" title="Contacto">
+                            <p:growl id="mensaje_contacto" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                    <p:panel>
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Email:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:inputText maxlength="75" id="persona_email"  validatorMessage="Email invalido" value="#{MbPersona.personaSeleccionada.correoPersona}" required="true" requiredMessage="Digite el email">
+                                    <p:keyFilter regEx="/[a-z0-9_\.\-@]/i" />
+                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                </p:inputText>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Telefono:" />
+                                <p:spacer height="10" width="10" />
+                                <p:inputMask value="#{MbPersona.personaSeleccionada.telefonoPersona}" mask="9999-9999" required="true" requiredMessage="Digite el telefono"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                        
+                        
+                        <p:tab id="confirmar" title="Confirmar">
+                            <p:scrollPanel style="height: 300px;border: none !important;">
+                    <p:panel header="Datos personales">
+                        <h:panelGrid columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Primer nombre:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.primerNombre}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo nombre:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.segundoNombre}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Primer apellido:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.primerApellido}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo apellido:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.segundoApellido}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha de nacimiento:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.fechaNacimiento}" style="font-weight: bold;">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="DUI:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.dui}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="NIT:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.personaSeleccionada.nit}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Domicilio">
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.municipio.departamento.nomDepto}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.codigodepartamento}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.municipio.nomMunicipio}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.codigomunicipio}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Domicilio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.personaSeleccionada.direccionResidencia}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel> 
+                    <p:panel header="Contacto">
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Email:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.personaSeleccionada.correoPersona}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Telefono:" />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.personaSeleccionada.telefonoPersona}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>    
+                           </p:scrollPanel>    
+                    <p:commandButton oncomplete="PF('wiz').loadStep('personal',false)" actionListener="#{MbPersona.modificar()}" style="float: right;" class="orange-btn" update="mensaje_modificar_datos_personales" value="Modificar" ajax="true" icon="ui-icon-plus" />    
+                    <br/><br/>
+                </p:tab>
+                    </p:wizard>
+                    <!--<div align="center">
+                        <p>
+                            <p:commandButton oncomplete="PF('wiz').loadStep('personal',false)" class="secondary-btn" onclick="PF('dialogoModificar').hide();" ajax="true" value="Cancelar" />
+                        </p>
+                    </div>-->
+                </p:panel>
+            </p:dialog>
+        </h:form>
+
+
+<!-- INICIO DIALOGO DEFAULT -->
+    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+        Procesando...
+    </p:dialog> 
+<!-- FIN DIALOGO DEFAULT -->
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+    </ui:define>
+</ui:composition>

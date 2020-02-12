@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Ubicacion" table="ubicacion" schema="public" optimistic-lock="version">
+        <id name="idUbicacion" type="int">
+            <column name="id_ubicacion" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="bitacoraCampo" class="sv.ues.dominio.BitacoraCampo" fetch="select">
+            <column name="id_bit_campo" />
+        </many-to-one>
+        <many-to-one name="cacerio" class="sv.ues.dominio.Cacerio" fetch="select">
+            <column name="id_cacerio" not-null="false" />
+        </many-to-one>
+        <property name="latitud" type="string">
+            <column name="latitud" length="50" not-null="true" />
+        </property>
+        <property name="longitud" type="string">
+            <column name="longitud" length="50" not-null="true" />
+        </property>
+        <property name="altitud" type="string">
+            <column name="altitud" length="50" not-null="true" />
+        </property>
+        <property name="poblacion" type="java.lang.Integer">
+            <column name="poblacion" />
+        </property>
+        <property name="codDepto" type="string">
+            <column name="cod_depto" length="10" not-null="false" />
+        </property>
+        <property name="codMun" type="string">
+            <column name="cod_mun" length="10" not-null="false" />
+        </property>
+        <property name="codCanton" type="string">
+            <column name="cod_canton" length="10" not-null="false" />
+        </property>
+    </class>
+</hibernate-mapping>

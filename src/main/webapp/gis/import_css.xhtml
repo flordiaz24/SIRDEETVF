@@ -1,0 +1,56 @@
+ <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+     <!--CSS-->
+
+     <h:outputStylesheet name="leaflet/leaflet.css" />
+
+     <h:outputScript name="leaflet.js" library="leaflet" />
+
+     <h:outputScript library="js" name="jsGis.js" />
+
+     <!-- Import zoomGome-->
+     <h:outputStylesheet name="leaflet/zoomHomeControl/leaflet.zoomhome.css" />
+     <h:outputScript library="leaflet" name="zoomHomeControl/leaflet.zoomhome.min.js" />
+     
+     <h:outputStylesheet name="leaflet/loadingControl/Control.Loading.css" />
+     <h:outputScript library="leaflet" name="loadingControl/Control.Loading.js" />
+     
+     <h:outputStylesheet name="leaflet/groupLayer/leaflet.groupedlayercontrol.css" />
+     <h:outputScript library="leaflet" name="groupLayer/leaflet.groupedlayercontrol.js" />
+     
+     <h:outputStylesheet name="leaflet/easyButton/easy-button.css" />
+     <h:outputScript library="leaflet" name="easyButton/easy-button.js" />
+     
+     <h:outputStylesheet name="leaflet/css/menuMap.css" />
+     <h:outputScript library="leaflet" name="js/menuGeo.js" />
+     
+     <h:outputStylesheet name="leaflet/css/GeoVectores.css" />
+     
+      <h:outputStylesheet name="leaflet/sidebar/leaflet-sidebar.css" />
+      <h:outputScript library="leaflet" name="sidebar/leaflet-sidebar.js" />
+     
+     
+     
+
+ 
+     <!--
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/leaflet/leaflet.css') }}" type="text/css" media="all" />
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/leaflet/zoomHomeControl/leaflet.zoomhome.css') }}" type="text/css"
+           media="all" />
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/leaflet/loadingControl/Control.Loading.css') }}" type="text/css"
+           media="all" />
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/leaflet/groupLayer/leaflet.groupedlayercontrol.css') }}"
+           type="text/css" media="all" />
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/css/menuMap.css') }}" type="text/css" media="all" />
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/leaflet/sidebar/leaflet-sidebar.css') }}" type="text/css"
+           media="all" />
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/css/GeoVectores.css') }}" type="text/css" media="all" />
+     <link rel="stylesheet" href="{{ asset('bundles/applicationcore/leaflet/easyButton/easy-button.css') }}" type="text/css"
+           media="all" />
+
+     -->
+
+ </ui:composition>

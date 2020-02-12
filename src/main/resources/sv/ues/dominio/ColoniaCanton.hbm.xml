@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.ColoniaCanton" table="colonia_canton" schema="public" optimistic-lock="version">
+        <id name="idColCan" type="int">
+            <column name="id_col_can" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="municipio" class="sv.ues.dominio.Municipio" fetch="select">
+            <column name="cod_municipio" length="50" not-null="true" />
+        </many-to-one>
+        <property name="nomUbicacion" type="string">
+            <column name="nom_ubicacion" length="50" not-null="true" />
+        </property>
+        <set name="cacerios" table="cacerio" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_col_can" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Cacerio" />
+        </set>
+        <set name="lotes" table="lote" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_colcan" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Lote" />
+        </set>
+
+    </class>
+</hibernate-mapping>

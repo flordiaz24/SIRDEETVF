@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Credenciales</ui:define>
+
+    <ui:define name="content">
+        <h:form id="registros">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel header="Modificar password">
+            <h:panelGrid columns="3" cellpadding="10">
+                <p:column>
+                    <h:outputText value="Passwor actual:"/>
+                    <p:spacer height="10" width="10" />
+                    <p:password value="#{MbUsuarioCredenciales.contrasenaVieja}" required="true" requiredMessage="Digite el password actual" maxlength="15" >
+                        
+                        <!--<p:keyFilter regEx="/[a-zA-Z0-9]/i" />-->
+                    </p:password>
+                </p:column>
+                
+                <p:column>
+                    <h:outputText value="Nuevo password:"/>
+                    <p:spacer height="10" width="10" />
+                    <p:password value="#{MbUsuarioCredenciales.contrasenaNueva}" required="true" requiredMessage="Digite el nuevo password" maxlength="15" validatorMessage="El nuevo password debe tener al menos 8 caracteres">
+                        <f:validateLength minimum="8"/>
+                        <!--<p:keyFilter regEx="/[a-zA-Z0-9]/i" />-->
+                    </p:password>
+                </p:column>
+                
+                <p:column>
+                    <h:outputText value="Confirmar nuevo password:"/>
+                    <p:spacer height="10" width="10" />
+                    <p:password value="#{MbUsuarioCredenciales.contrasenaNuevaConfirmar}" required="true" requiredMessage="Digite el password para confirmar" maxlength="15">
+                        <!--<p:keyFilter regEx="/[a-zA-Z0-9]/i" />-->
+                    </p:password>
+                </p:column>
+            </h:panelGrid>
+                <p:commandButton actionListener="#{MbUsuarioCredenciales.dialogos()}" update="mensaje" style="float: right;" class="secondary-btn"  value="Modificar" ajax="true" icon="ui-icon-plus" /> 
+            <br/><br/>
+            </p:panel>
+            
+            <!--onclick="PF('bui').show()"-->
+            <p:blockUI block="registros" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+        
+        
+        
+        <h:form id="formulario_modificar">
+            <p:dialog onHide="PF('bui').hide()" header="Reset password" styleClass="" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true">
+                <p:panel style="height: 100px;width: 400px;border: none !important;" id="panel_modificar">
+                    <div align="center">
+                        &#191;Esta seguro de modificar el password&#63; <br/><br/>
+                        <p:commandButton actionListener="#{MbUsuarioCredenciales.modificarPasswordPersonal()}" value="Confirmar" class="orange-btn" />
+                        <p:spacer height="10" width="10" />
+                        <p:commandButton value="Cancelar" class="blue-grey-btn" oncomplete="PF('dialogoModificar').hide();"/>
+                    </div>
+                    
+                </p:panel>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+</ui:composition>

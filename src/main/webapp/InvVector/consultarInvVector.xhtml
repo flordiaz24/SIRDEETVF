@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">gestión investigación de vector</ui:define>
+
+
+    <ui:define name="content">
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel>
+                <p:dataTable value="#{mbInvVector.lsInvVector}" id="x" var="inv" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <f:facet name="header">
+                        Investigación de vector
+                    </f:facet>
+                    <p:column headerText="Vector de estudio">
+                        <h:outputText value="#{inv.vector.nomVector}" />
+                    </p:column>
+                    <p:column headerText="Investigación asociada">
+                        <h:outputText value="#{inv.investigacion.nomInvest}" />
+                    </p:column>
+                    <p:column headerText="Titulo de investigación de vector">
+                        <h:outputText value="#{inv.tituloInv}" />
+                    </p:column>
+                    <p:column headerText="Descripción">
+                        <h:outputText value="#{inv.descInvVector}" /> 
+                    </p:column>
+                    <p:column headerText="Fecha Registro">
+                        <h:outputText value="#{inv.fechaRegistro}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>     
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <div align="center">
+                            <div align="center">
+                                <p:commandButton value="Consultar" class="blue-grey-btn" actionListener="#{mbInvVector.setInvestigacionSeleccionada(inv)}" oncomplete="PF('dialogoConsultar').show();" update="formulario_consultar:dlg_consultar" />
+                                <p:spacer height="10" width="10" />
+                                <p:commandButton value="Modificar" class="orange-btn" actionListener="#{mbInvVector.setInvestigacionSeleccionada(inv)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod" />    
+
+                            </div>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+            </p:panel>
+
+        </h:form>
+
+
+        <h:form id="formulario_consultar">
+            <p:dialog header="Investigación registrada" widgetVar="dialogoConsultar" id="dlg_consultar" resizable="false" modal="true">
+                <p:scrollPanel  style="height: 500px;width: 1000px;">
+
+                      <p:panel header="Investigación de vector" id="panel_consultar">
+                        <h:panelGrid columns="1" cellpadding="10"> 
+                            <p:column>
+                                <p:outputLabel value="Vector a estudiar: "/>
+                                <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.vector.nomVector}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Investigación asociada: "/>
+                                <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.investigacion.nomInvest}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Titulo del inventario de vector: "/>
+                                <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.tituloInv}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Descripcion de la investigacion: "/>
+                                <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.descInvVector}" style="font-weight: bold;"/>
+                            </p:column>
+
+
+                        </h:panelGrid>
+
+                    </p:panel>     
+
+                </p:scrollPanel>
+            </p:dialog>
+        </h:form>     
+
+        <h:form id="formulario_modificar">
+            <p:growl id="mensaje_modificar_datos_personales" showDetail="true" sticky="false" life="4000"/>
+            <p:dialog style="margin-bottom: 22% !important;" header="Modificar" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true" onHide="PF('wiz').loadStep('personal',false)">
+                <p:panel style="border: none !important;" id="panel_modificar" >
+                    <p:wizard widgetVar="wiz" id="registro" style="width: 1300px;" >
+                        <p:tab id="general" title="Datos generales">
+                            <p:panel>
+                                <p:messages id="msg"/>
+                                <div class="ui-g ui-fluid">
+                                    <div class="ui-g-12 ui-lg-6">
+
+                                        <p:panelGrid columns="1"  layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <p:outputLabel for="lab" value="Seleccione Vector a estudiar"/>
+                                            <p:selectOneMenu id="lab" value="#{mbInvVector.invVectorSeleccionado.vector}" required="true" requiredMessage="Seleccione vector" >
+
+                                                <f:selectItem itemLabel="--Seleccione Vector--" itemValue="#{null}" />
+                                                <f:selectItems value="#{mbInvVector.lsVector}"
+                                                               var="vector"
+                                                               itemValue="#{vector}"
+                                                               itemLabel="#{vector.nomVector}"/>
+                                                <f:converter binding="#{converterVector}" />
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="Investigación asociada" for="labx"/>
+                                            <p:selectOneMenu id="labx" value="#{mbInvVector.invVectorSeleccionado.investigacion}" required="true" requiredMessage="Seleccione investigacion" >
+
+                                                <f:selectItem itemLabel="--Seleccione investigación--" itemValue="#{null}" />
+                                                <f:selectItems value="#{mbInvVector.lsInvestigacion}"
+                                                               var="investigacion"
+                                                               itemValue="#{investigacion}"
+                                                               itemLabel="#{investigacion.nomInvest}"/>
+                                                <f:converter binding="#{converterInvestigacion}" />
+                                            </p:selectOneMenu>
+
+
+
+
+                                            <p:outputLabel value="Título de la investigación vector" />
+                                            <p:inputText value="#{mbInvVector.invVectorSeleccionado.tituloInv}" required="true" requiredMessage="Digite titulo de la investigacion" />
+
+
+
+                                            <p:outputLabel value="Descripción de la investigación del vector"/>
+                                            <p:inputTextarea rows="5" value="#{mbInvVector.invVectorSeleccionado.descInvVector}" required="true" requiredMessage="Digite descripcion del vector"/>
+
+                                        </p:panelGrid>  
+                                    </div>
+                                </div>
+                            </p:panel>
+
+                        </p:tab>
+                        <p:tab id="confirmar" title="confirmar datos">
+                            <p:panel>
+                                <h:panelGrid columns="1" cellpadding="10">
+                                    <p:column>
+                                        <p:outputLabel value="Vector a estudiar: "/>
+                                        <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.vector.nomVector}" style="font-weight: bold;"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel value="Investigación asociada: "/>
+                                        <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.investigacion.nomInvest}" style="font-weight: bold;"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel value="Titulo del inventario de vector: "/>
+                                        <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.tituloInv}" style="font-weight: bold;"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputLabel value="Descripcion de la investigacion: "/>
+                                        <p:outputLabel value="#{mbInvVector.invVectorSeleccionado.descInvVector}" style="font-weight: bold;"/>
+                                    </p:column>
+
+                                </h:panelGrid>
+                            </p:panel>
+
+                            <p:commandButton value="Modificar" onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('general',false)" 
+                                             actionListener="#{mbInvVector.modificar()}" update="mensaje_modificar_datos_personales" id="btnSave"
+                                             style="float: right;" class="secondary-btn" ajax="true" icon="ui-icon-plus" />
+                        </p:tab>
+
+
+                    </p:wizard>
+
+                </p:panel>
+            </p:dialog>
+        </h:form>   
+    </ui:define>
+</ui:composition>

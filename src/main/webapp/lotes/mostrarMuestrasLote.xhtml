@@ -1,0 +1,260 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Mostrar Muestras de Lotes</ui:define>
+
+    <ui:define name="content">
+
+        <!-- INICIO FORMULARIO MOSTRAR MUESTRAS DE LOTES -->
+        <h:form id="muestrasRegistradas">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panelGrid columns="4" layout="grid" styleClass="showcase-text-align-center" columnClasses="p-col-12 p-md-6 p-lg-3, p-col-12 p-md-6 p-lg-3, p-col-12 p-md-6 p-lg-3, p-col-12 p-md-6 p-lg-3">
+                <p:panelGrid >
+                    <p:outputLabel value="Nombre del lote:" />
+                    <p:spacer height="10" width="10" />
+                    <p:selectOneMenu value="#{mbMuestrasLotes.cod_lote2}">
+                        <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                        <f:selectItems value="#{MbLote.lista_lote_activos_inactivos(1)}" var="ve" itemValue="#{ve.idLote}" itemLabel="#{ve.nombreLote}" />
+                        <p:ajax update="mostrar_mu" event="change" listener="#{mbMuestrasLotes.obtener_cod_fam_vector(mbMuestrasLotes.cod_lote2)}"/>
+                        <p:ajax update="nomVector nomCientifico nombreFamilia" event="change" listener="#{MbLote.setLoteSeleccionado(MbLote.lote_por_id(mbMuestrasLotes.cod_lote2))}"/>
+                    </p:selectOneMenu><br/>
+                </p:panelGrid>
+                <p:panelGrid >
+                    <p:outputLabel value="Vector:" />
+                    <p:spacer height="10" width="10" />
+                    <p:outputLabel id="nomVector" value="#{MbLote.vector.nomVector}" style="font-weight: bold;" />
+                </p:panelGrid>
+                <p:panelGrid >
+                    <p:outputLabel value="Nombre Cientifico:" />
+                    <p:spacer height="10" width="10" />
+                    <p:outputLabel id="nomCientifico" value="#{MbLote.vector.nomCientifico}" style=" font-style: italic; font-weight: bold;"/>
+                </p:panelGrid>
+                <p:panelGrid >
+                    <p:outputLabel value="Familia:" />
+                    <p:spacer height="10" width="10" />
+                    <p:outputLabel id="nombreFamilia" value="#{mbMuestrasLotes.obtener_familia().nombreFamilia}" style="font-weight: bold;"/>
+                </p:panelGrid>
+            </p:panelGrid>
+
+            <p:dataTable  id="mostrar_mu" emptyMessage="No se han encontrado registros" var="mu" value="#{mbMuestrasLotes.muestras_por_lote(mbMuestrasLotes.cod_lote2)}" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                <p:column headerText="correlativo">
+                    <h:outputText value="#{mu.secuencia}" />
+                </p:column>
+                <p:column headerText="Estadio">
+                    <h:outputText value="#{mbMuestrasLotes.estadio_muestra(mu.edadMuestra)}" />
+                </p:column>
+                <p:column headerText="Genero">
+                    <h:outputText value="#{mu.generoMuestra == 'Hembra'? 'Hembra' : 'Macho'}"/>
+                </p:column>
+
+                <p:column headerText="Posee parasito">
+                    <h:outputText value="#{mu.parasito == true? 'Si' : 'No'}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <div align="center">
+                        <p:commandButton value="Consultar" class="blue-grey-btn" onclick="#{mbMuestrasLotes.asignarUbicacionMuestra_desde_colca(MbLote.loteSeleccionado.coloniaCanton.idColCan)}" actionListener="#{mbMuestrasLotes.setMuestraSeleccionada(mu)}"  action="#{mbMuestrasLotes.obtener_cod_fam_vector(mu.lote.idLote)}" oncomplete="PF('dialogoConsultar').show();" update="formulario_consultar:dlg_consultar" />
+                        <p:spacer height="10" width="10" />
+                        <p:commandButton value="Modificar" class="orange-btn" actionListener="#{mbMuestrasLotes.setModMuestra(mu)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod" />
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <!-- FIN FORMULARIO MOSTRAR MUESTRAS DE LOTES -->
+        
+        <!-- INICIO FORMULARIO CONSULTAR MUESTRAS -->
+        <h:form id="formulario_consultar">
+            <p:dialog header="Lote Registrado" widgetVar="dialogoConsultar" id="dlg_consultar" resizable="false" modal="true">
+                <p:scrollPanel  style="height: auto;width: 1000px;">
+                    <p:panel header="Datos muestras" id="panel_consultar_dmuestras">
+                        <h:panelGrid columns="4" cellpadding="10"> 
+                            <p:column >
+                                <h:outputText value="Correlativo:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.muestraSeleccionada.secuencia}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Estadio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.estadio_muestra(mbMuestrasLotes.muestraSeleccionada.edadMuestra)}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Genero:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.muestraSeleccionada.generoMuestra == 'Hembra'? 'Hembra' : 'Macho'}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Posee parasito:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.muestraSeleccionada.parasito == true? 'Si' : 'No'}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Nombre cientifico:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbLote.vector.nomCientifico}" style=" font-style: italic; font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Familia:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.obtener_familia().nombreFamilia}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo de orden:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.obtener_orden().nombreOrden}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Tipo de muestra:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.tipo_muestra_por_id(mbMuestrasLotes.muestraSeleccionada.tipoMuestra.idTipoMues).nomMuestra}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Ubicacion de la muestra" id="panel_consultar_dmuestrasLote">
+                        <h:panelGrid columns="4" cellpadding="10">  
+                            <p:column >
+                                <h:outputText value="Departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.ubicacionDepto.nomDepto}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.ubicacionDepto.codDepto}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.ubicacionMunicipio.nomMunicipio}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.ubicacionMunicipio.codMunicipio}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Colonia/Canton:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.ubicacionColonia.nomUbicacion}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Colonia/Canton:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbMuestrasLotes.ubicacionColonia.idColCan}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:scrollPanel >
+            </p:dialog>
+        </h:form>       
+        <!-- FIN FORMULARIO CONSULTAR LOTE -->
+
+        <!-- INICIO FORMULARIO MODIFICAR MUESTRAS -->
+        <h:form id="formulario_modificar">
+            <p:dialog header="Modificar" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true" onHide="PF('wiz').loadStep('general',false)">
+                <p:panel style="border: none !important;" rendered="#{not empty mbMuestrasLotes.modMuestra}" id="panel_modificar">
+                    <p:wizard widgetVar="wiz" id="registro" flowListener="#{mbMuestrasLotes.flujoModificar}">
+                        <p:tab id="general" title="Datos generales">
+                            <p:growl id="mensaje_general_registro" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+                            <p:panel>
+                                <!--aca va Datos Generales-->
+                                <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Correlativo" />
+                                        <p:inputNumber id="nmuestras" minValue="0" decimalPlaces="0" readonly="true"  value="#{mbMuestrasLotes.modMuestra.secuencia}"/>
+                                    </h:panelGrid>
+           
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Tipo de muestra:" />
+                                        <p:selectOneMenu value="#{mbMuestrasLotes.modTipomuestra}" required="true" requiredMessage="Seleccione el Tipo de muestra">
+                                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{mbMuestrasLotes.listaTipoMuestras()}" var="tm" itemValue="#{tm.idTipoMues}" itemLabel="#{tm.nomMuestra}" />
+                                        </p:selectOneMenu><br/>  
+                                    </h:panelGrid> 
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Estadio" />
+                                        <p:selectOneMenu value="#{mbMuestrasLotes.modMuestra.edadMuestra}" required="true" requiredMessage="Seleccione el Estadio de la muestra">
+                                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItem itemLabel="Huevo" itemValue="1"/>
+                                            <f:selectItem itemLabel="Primera fase ninfal" itemValue="2" />
+                                            <f:selectItem itemLabel="Segunda fase ninfal" itemValue="3"/>
+                                            <f:selectItem itemLabel="Tercera fase ninfal" itemValue="4" />
+                                            <f:selectItem itemLabel="Cuarta fase ninfal" itemValue="5"/>
+                                            <f:selectItem itemLabel="Quinta fase ninfal" itemValue="6"/>
+                                            <f:selectItem itemLabel="Fase adulta" itemValue="7"/>
+                                        </p:selectOneMenu>  <br/>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Genero de la muestra" />
+                                        <p:selectOneRadio value="#{mbMuestrasLotes.modMuestra.generoMuestra}" id="console" unselectable="false" required="true" requiredMessage="Seleccione el genero de la muestra">
+                                            <f:selectItem itemLabel="Hembra" itemValue="Hembra" />
+                                            <f:selectItem itemLabel="Macho" itemValue="Macho" />
+                                        </p:selectOneRadio>
+                                    </h:panelGrid> 
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Posee parasito:" />
+                                        <p:selectOneRadio value="#{mbMuestrasLotes.modMuestra.parasito}" id="console1" unselectable="false" required="true" requiredMessage=" Seleccione si posee parasito o no">
+                                            <f:selectItem itemLabel="Si" itemValue="true" />
+                                            <f:selectItem itemLabel="No" itemValue="false" />
+                                        </p:selectOneRadio>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <!--aca termina Datos generales-->
+                            </p:panel>
+                        </p:tab>
+                        <p:tab id="confirmar" title="Confirmar">
+                            <p:panel>
+                                <!--aca va confirmar-->
+                                <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Correlativo" />
+                                        <h:outputText value="#{mbMuestrasLotes.modMuestra.secuencia}" style="font-weight: bold;"/>
+                                    </h:panelGrid>
+                                    
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Tipo de muestra:" />
+                                        <h:outputText value="#{mbMuestrasLotes.tipo_muestra_por_id(mbMuestrasLotes.modTipomuestra).nomMuestra}" style="font-weight: bold;"/>            
+                                    </h:panelGrid> 
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Estadio" />
+                                        <h:outputText value="#{mbMuestrasLotes.estadio_muestra(mbMuestrasLotes.modMuestra.edadMuestra)}" style="font-weight: bold;"/>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Genero de la muestra" />
+                                        <h:outputText value="#{mbMuestrasLotes.modMuestra.generoMuestra}" style="font-weight: bold;"/>
+                                    </h:panelGrid> 
+
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Posee parasito:" />
+                                        <h:outputText value="#{mbMuestrasLotes.modMuestra.parasito == true ? 'Si': 'No'}" style="font-weight: bold;"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <!--aca termina confirmar-->
+                                <br/>
+                                <p:commandButton style="float: right;" class="orange-btn" oncomplete="PF('wiz').loadStep('general',false)" actionListener="#{mbMuestrasLotes.modificar_muestra()}" ajax="true" value="Modificar" update="muestrasRegistradas:mensaje"/>
+                                <br/><br/>
+                            </p:panel>
+                        </p:tab>
+                    </p:wizard>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+        <!-- FIN FORMULARIO MODIFICAR MUESTRAS -->
+
+        <!-- INICIO DIALOGO DEFAULT -->
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            Procesando...
+        </p:dialog>
+        <!-- FIN DIALOGO DEFAULT -->
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+    </ui:define>
+</ui:composition>
+

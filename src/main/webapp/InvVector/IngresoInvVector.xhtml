@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Ingreso de investigación de vector</ui:define>
+
+    <ui:define name="content">
+        <h1>Inventario de vector</h1>
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" >
+                <p:autoUpdate/>
+            </p:growl>    
+            <p:growl id="mensaje2" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:wizard widgetVar="wiz" id="registro">
+                <p:tab id="general" title="Datos generales">
+                    <p:panel>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-lg-6">
+
+                                <p:panelGrid columns="1"  layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:outputLabel for="lab" value="Seleccione Vector a estudiar"/>
+                                <p:selectOneMenu id="lab" value="#{mbInvVector.invVector.vector}" required="true" requiredMessage="Seleccione vector" >
+
+                                    <f:selectItem itemLabel="--Seleccione Vector--" itemValue="#{null}" />
+                                    <f:selectItems value="#{mbInvVector.lsVector}"
+                                                   var="vector"
+                                                   itemValue="#{vector}"
+                                                   itemLabel="#{vector.nomVector}"/>
+                                    <f:converter binding="#{converterVector}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Investigación asociada" for="labx"/>
+                                <p:selectOneMenu id="labx" value="#{mbInvVector.invVector.investigacion}" required="true" requiredMessage="Seleccione investigacion" >
+
+                                    <f:selectItem itemLabel="--Seleccione investigación--" itemValue="#{null}" />
+                                    <f:selectItems value="#{mbInvVector.lsInvestigacion}"
+                                                   var="investigacion"
+                                                   itemValue="#{investigacion}"
+                                                   itemLabel="#{investigacion.nomInvest}"/>
+                                    <f:converter binding="#{converterInvestigacion}" />
+                                </p:selectOneMenu>
+
+
+
+
+                                <p:outputLabel value="Título de la investigación vector" />
+                                <p:inputText value="#{mbInvVector.invVector.tituloInv}" required="true" requiredMessage="Digite titulo de la investigacion" />
+
+
+
+                                <p:outputLabel value="Descripción de la investigación del vector"/>
+                                <p:inputTextarea rows="5" value="#{mbInvVector.invVector.descInvVector}" required="true" requiredMessage="Digite descripcion del vector"/>
+
+                                </p:panelGrid>  
+                            </div>
+                        </div>
+                    </p:panel>
+
+                </p:tab>
+                <p:tab id="confirmar" title="confirmar datos">
+                    <p:panel>
+                        <h:panelGrid columns="1" cellpadding="10">
+                            <p:column>
+                            <p:outputLabel value="Vector a estudiar: "/>
+                            <p:outputLabel value="#{mbInvVector.invVector.vector.nomVector}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column>
+                            <p:outputLabel value="Investigación asociada: "/>
+                            <p:outputLabel value="#{mbInvVector.invVector.investigacion.nomInvest}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column>
+                            <p:outputLabel value="Titulo del inventario de vector: "/>
+                            <p:outputLabel value="#{mbInvVector.invVector.tituloInv}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column>
+                            <p:outputLabel value="Descripcion de la investigacion: "/>
+                            <p:outputLabel value="#{mbInvVector.invVector.descInvVector}" style="font-weight: bold;"/>
+                            </p:column>
+                            
+                        </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:commandButton value="Guardar" onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('general',false)" 
+                                             actionListener="#{mbInvVector.registrarVector()}" update="mensaje2" id="btnSave"
+                                             style="float: right;" class="secondary-btn" ajax="true" icon="ui-icon-plus" />
+                </p:tab>
+            </p:wizard>
+
+            <p:blockUI block="F01" trigger="btnSave"  widgetVar="bui">
+                Procesando...
+            </p:blockUI>   
+        </h:form>
+    </ui:define>
+</ui:composition>    

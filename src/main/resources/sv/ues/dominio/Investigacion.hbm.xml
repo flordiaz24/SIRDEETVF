@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Investigacion" table="investigacion" schema="public" optimistic-lock="version">
+        <id name="codInvest" type="int">
+            <column name="cod_invest" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="investigacion" class="sv.ues.dominio.Investigacion" fetch="select">
+            <column name="inv_cod_invest" />
+        </many-to-one>
+        <many-to-one name="laboratorio" class="sv.ues.dominio.Laboratorio"  lazy="false"  cascade="all" fetch="select">
+            <column name="cod_laboratorio" not-null="true" />
+        </many-to-one>
+        <property name="nomInvest" type="string">
+            <column name="nom_invest" length="200" not-null="true" />
+        </property>
+        <property name="estadoInvest" type="java.lang.Boolean">
+            <column name="estado_invest" />
+        </property>
+        <property name="anio" type="int">
+            <column name="anio" />
+        </property>
+        <property name="mes" type="int">
+            <column name="mes" />
+        </property>
+        <property name="fechaCreacion" type="date">
+             <column name="fecha_creacion" length="13" not-null="true" />
+        </property>
+       
+        <set name="actividads" table="actividad" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_invest" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Actividad" />
+        </set>
+        <set name="investigadors" table="investigacion_investigador" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="cod_invest" not-null="true" />
+            </key>
+            <many-to-many entity-name="sv.ues.dominio.Investigador">
+                <column name="id_inv" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="investigacions" table="investigacion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="inv_cod_invest" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Investigacion" />
+        </set>
+        <set name="invVectors" table="inv_vector" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_invest" />
+            </key>
+            <one-to-many class="sv.ues.dominio.InvVector" />
+        </set>
+        <one-to-one name="perfilInvs" class="sv.ues.dominio.PerfilInv" cascade="save-update">
+         </one-to-one>
+      <!--  <set name="perfilInvs" table="perfil_inv" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_invest" />
+            </key>
+            <one-to-one class="sv.ues.dominio.PerfilInv" />
+        </set> -->
+    </class>
+</hibernate-mapping>

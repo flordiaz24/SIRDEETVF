@@ -1,0 +1,255 @@
+.panel-green > .panel-heading {
+  color: #ffffff;
+  background-color: #03831f;
+  border-color: #ffffff;
+}
+.panel-red > .panel-heading {
+  color: #ffffff;
+  background-color: #b30404;
+  border-color: #ffffff;
+}
+.panel-grey > .panel-heading {
+  color: #ffffff;
+  background-color: #606060;
+  border-color: #ffffff;
+}
+
+  .content-wrapper,
+  .main-footer,
+  .right-side {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .content{
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  .legend {
+    background: white;
+    line-height: 1.5em;
+  }
+  .legend i {
+    width: 5em;
+    float: left;
+  }
+  #map {
+    height: 575px;
+    width:100%;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+  .leaflet-tooltip.my-labels {
+    background-color: transparent;
+    border: transparent;
+    box-shadow: none;
+  }
+
+  * {
+margin: 0;
+padding: 0;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+body {
+background: #2d2c41;
+font-family: 'Open Sans', Arial, Helvetica, Sans-serif, Verdana, Tahoma;
+}
+
+ul {
+list-style-type: none;
+}
+
+
+/** =======================
+* Contenedor Principal
+===========================*/
+h1 a {
+color: #c12c42;
+}
+
+.accordion {
+width: 100%;
+max-width: 360px;
+margin: 30px auto 20px;
+background: #FFF;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+
+.accordion .link {
+cursor: pointer;
+display: block;
+padding: 15px 15px 15px 22px;
+color: #4D4D4D;
+font-size: 14px;
+font-weight: 700;
+border-bottom: 1px solid #CCC;
+position: relative;
+-webkit-transition: all 0.4s ease;
+-o-transition: all 0.4s ease;
+transition: all 0.4s ease;
+}
+
+.accordion li:last-child .link {
+border-bottom: 0;
+}
+
+.accordion li i {
+position: absolute;
+top: 16px;
+left: 0px;
+font-size: 18px;
+color: #595959;
+-webkit-transition: all 0.4s ease;
+-o-transition: all 0.4s ease;
+transition: all 0.4s ease;
+}
+
+.accordion li i.fa-chevron-down {
+right: 12px;
+left: auto;
+font-size: 16px;
+}
+
+.accordion li i.fa-angle-down {
+right: 12px;
+left: auto;
+font-size: 16px;
+}
+
+.accordion li.open .link {
+color: #3c8dbc;
+}
+
+.accordion li.open i {
+color: #3c8dbc;
+}
+.accordion li.open i.fa-chevron-down {
+-webkit-transform: rotate(180deg);
+-ms-transform: rotate(180deg);
+-o-transform: rotate(180deg);
+transform: rotate(180deg);
+}
+
+
+/*Link2*/
+.accordion .link2 {
+cursor: pointer;
+display: block;
+padding: 15px 15px 15px 25px;
+color: #4D4D4D;
+font-size: 14px;
+font-weight: 700;
+border-bottom: 1px solid #CCC;
+position: relative;
+-webkit-transition: all 0.4s ease;
+-o-transition: all 0.4s ease;
+transition: all 0.4s ease;
+}
+
+.accordion li:last-child .link2 {
+border-bottom: 0;
+}
+
+.accordion li.open .link2 {
+color: #3c8dbc;
+}
+
+.accordion li.default .submenu {display: block;}
+/**
+* Submenu
+-----------------------------*/
+.submenu {
+display: none;
+background: #ffffff;
+font-size: 14px;
+}
+
+.submenu li {
+border-bottom: 1px solid #4b4a5e;
+}
+
+.submenu a {
+display: block;
+text-decoration: none;
+color: #040404;
+padding: 12px;
+padding-left: 20px;
+-webkit-transition: all 0.25s ease;
+-o-transition: all 0.25s ease;
+transition: all 0.25s ease;
+}
+
+.radio1 {
+display: block;
+text-decoration: none;
+color: #040404;
+padding: 12px;
+padding-left: 20px;
+-webkit-transition: all 0.25s ease;
+-o-transition: all 0.25s ease;
+transition: all 0.25s ease;
+}
+
+.submenu a:hover {
+background: #e3e3e3;
+color: #000000;
+}
+
+.accordion li.default .submenu2{display: block;}
+/**
+* Submenu2
+-----------------------------*/
+.submenu2 {
+display: none;
+background: #ffffff;
+font-size: 14px;
+}
+
+.submenu2 li {
+border-bottom: 1px solid #4b4a5e;
+}
+
+.submenu2 a {
+display: block;
+text-decoration: none;
+color: #040404;
+padding: 12px;
+padding-left: 60px;
+-webkit-transition: all 0.25s ease;
+-o-transition: all 0.25s ease;
+transition: all 0.25s ease;
+}
+
+.submenu2 a:hover {
+background: #e3e3e3;
+color: #000000;
+}
+
+.espacio{
+  padding-left: 20px;
+}
+
+.panelbusqueda{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+span.icono-mapa,i.icono-mapa{
+    display: inline-block!important;
+    width: 32px!important;
+    margin-top: 10px!important;
+}
+.icono-home{
+    display: inline-block!important;
+    width: 32px!important;
+}
+
+.oculto{
+    display: none!important;
+}

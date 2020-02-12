@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.InvVector" table="inv_vector" schema="public" optimistic-lock="version">
+        <id name="idInvVector" type="int">
+            <column name="id_inv_vector" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="investigacion" class="sv.ues.dominio.Investigacion" lazy="false" fetch="select">
+            <column name="cod_invest" />
+        </many-to-one>
+        <many-to-one name="vector" class="sv.ues.dominio.Vector" lazy="false" fetch="select">
+            <column name="cod_vector" not-null="true" />
+        </many-to-one>
+        <property name="tituloInv" type="string">
+            <column name="titulo_inv" length="50" />
+        </property>
+        <property name="descInvVector" type="string">
+            <column name="desc_inv_vector" length="200" />
+        </property>
+        <property name="fechaRegistro" type="date">
+             <column name="fecha_registro" length="13" not-null="true" />
+        </property>
+        <set name="bitacoraCampos" table="bitacora_campo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_inv_vector" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.BitacoraCampo" />
+        </set>
+        <set name="bitacoraLabs" table="bitacora_lab" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_inv_vector" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.BitacoraLab" />
+        </set>
+    </class>
+</hibernate-mapping>

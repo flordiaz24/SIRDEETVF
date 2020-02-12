@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <title>CENSALUD</title>
+        <style type="text/css">
+            body {
+                zoom: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
+            html,body,#map {
+                -webkit-print-color-adjust: exact;
+                height: 100%;
+                font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+            }
+        </style>
+
+        <!--Jquery-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <!-- Load Esri Leaflet from CDN -->
+        <!--       <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js"
+            integrity="sha512-cMQ5e58BDuu1pr9BQ/eGRn6HaR6Olh0ofcHFWe5XesdCITVuSBiBZZbhCijBe5ya238f/zMMRYIMIIg1jxv4sQ=="
+            crossorigin=""></script>-->
+        <ui:include src="import_css.xhtml"/>
+
+
+
+        <script type="text/javascript">
+            var marker = new Array();
+            var map;
+            $(document).ready(function () {
+                mapa();
+            }); //fin document ready   
+            function salir() {
+                history.back();
+            }
+
+            function buscar() {
+                limpiarMapa()
+                var owsrootUrl = 'http://34.73.210.233/geoserver/ows';
+                var defaultParameters = {
+                    service: 'WFS',
+                    version: '1.0.0',
+                    request: 'GetFeature',
+                    typeName: 'sirdeetv:ubicacion',
+                    outputFormat: 'application/json',
+                };
+                var parameters = L.Util.extend(defaultParameters);
+                var URL = owsrootUrl + L.Util.getParamString(parameters);
+                $("#estatus").removeClass("oculto");
+
+                $.ajax({
+                    url: URL,
+                    success: function (data) {
+                        var geojson = new L.geoJson(data, {
+                            style: {"color": "#2ECCFA", "weight": 2},
+                            onEachFeature: function (feature, layer) {
+                                marker.push(layer);
+                                map.addLayer(layer);
+                                layer.bindPopup("Has hecho click en " + feature.id);
+                            }}
+                        /*layer.bindPopup("Has hecho click en " + feature.properties.name);*/
+                        );/*.addTo(map);*/
+                    },
+                    complete: function () {
+                        $("#estatus").addClass("oculto");
+                        //alert('Finalizo');
+                    }
+                });
+            }
+            function buscarFiltro() {
+                /*
+                 * 
+                 * viewparams: 'filtro:' + whereUbicacion+
+                 ';fpessemana:'+whereSemanaPesquisa+
+                 ';fpesanio:'+whereAnioPesquisa+
+                 ';fmonisemana:'+whereSemanaMonitoreo+
+                 ';fmonianio:'+whereAnioMonitoreo+
+                 ';fcasosemana:'+whereSemanaCaso+
+                 ';fcasoanio:'+whereAnioCaso
+                 */
+                limpiarMapa()
+                var miCaserio = $('#caserio').val();
+                var filtrosql = '';
+                var filtrosql2 = '';
+                if (miCaserio != 0) {
+                    filtrosql = 'WHERE id_cacerio=' + miCaserio;
+                }
+                var owsrootUrl = 'http://34.73.210.233/geoserver/ows';
+                var defaultParameters = {
+                    service: 'WFS',
+                    version: '1.0.0',
+                    request: 'GetFeature',
+                    typeName: 'sirdeetv:ubicacionFiltro',
+                    outputFormat: 'application/json',
+                    viewparams: 'filtro:' + filtrosql
+                };
+                var parameters = L.Util.extend(defaultParameters);
+                var URL = owsrootUrl + L.Util.getParamString(parameters);
+                $("#estatus").removeClass("oculto");
+
+                $.ajax({
+                    url: URL,
+                    success: function (data) {
+                        var geojson = new L.geoJson(data, {
+                            style: {"color": "#2ECCFA", "weight": 2},
+                            onEachFeature: function (feature, layer) {
+                                marker.push(layer);
+                                map.addLayer(layer);
+                                layer.bindPopup("Has hecho click en " + feature.id);
+                            }}
+                        /*layer.bindPopup("Has hecho click en " + feature.properties.name);*/
+                        );/*.addTo(map);*/
+                    },
+                    complete: function () {                        
+                        $("#estatus").addClass("oculto");
+                        //console.log(marker);
+                    }
+                });
+            }
+        </script>
+
+    </h:head>
+    <h:body>
+        <div id="map"></div>
+        <!-- optionally define the sidebar content via HTML markup -->
+        <div id="sidebar" class="leaflet-sidebar collapsed">
+            <!-- nav tabs -->
+            <div class="leaflet-sidebar-tabs">
+                <!-- top aligned tabs -->
+                <ul role="tablist">
+                    <li ><a href="#home" role="tab" title="Ver Menu"><i class="icono-mapa icon-map-marker active"></i></a></li>
+                    <li><a title="Salir" onClick="salir()"><i class="icono-mapa icon-signout"></i></a></li>
+                </ul>
+
+                <!-- bottom aligned tabs -->
+                <ul role="tablist">
+                    <li><a title="Ayuda"><i class="icono-mapa icon-info"></i></a></li>
+                </ul>
+            </div>
+
+            <!-- panel content -->
+            <div class="leaflet-sidebar-content">
+                <div class="leaflet-sidebar-pane" id="home">
+                    <h1 class="leaflet-sidebar-header">
+                        GEOCENSALUD
+                        <span class="leaflet-sidebar-close"><i class="icono-mapa icon-caret-left"></i></span>
+                    </h1><br/>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home2">Caserios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu1">Vectores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu2">Filtros</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div id="home2" class="container tab-pane active"><br/>
+                            <div id="ubicaciondiv">
+                                <label for="caserio">Caserio:</label>
+                                <select id='caserio' name='caserio' class="form-control" required="required">
+                                    <option value="0">Todos</option>
+                                    <option value="1">Caserio 1</option>
+                                    <option value="2">Caserio 2</option>
+                                    <option value="3">Caserio 3</option>
+                                    <option value="4">Caserio 4</option>
+                                    <option value="5">Caserio 5</option>
+                                </select>
+                            </div><br/><br/>
+                            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="buscar()">Buscar</button>
+                            <button type="button" class="btn btn-success btn-lg btn-block" onclick="buscarFiltro()">Buscar por Filtro</button>
+                            <br/> 
+                            <div >
+                                <div id="estatus" class="text-center oculto">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Cargando...</span>
+                                    </div>
+                                </div>
+                                <div id="msg-estatus"></div>
+                            </div>
+
+                        </div>
+                        <div id="menu1" class="container tab-pane fade"><br/>
+                            <ui:include src="filtrochagas.xhtml"/>
+                        </div>
+                        <div id="menu2" class="container tab-pane fade"><br/>
+                            <h3>Filtros</h3>
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
+

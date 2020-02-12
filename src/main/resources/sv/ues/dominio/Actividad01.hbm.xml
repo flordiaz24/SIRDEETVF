@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 01-24-2020 08:44:23 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Actividad01" table="actividad_01" schema="public" optimistic-lock="version">
+        <id name="idActividad01" type="int">
+            <column name="id_actividad01" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="actividadEncabezado" class="sv.ues.dominio.ActividadEncabezado" fetch="select">
+            <column name="id_encabezado" />
+        </many-to-one>
+        <property name="identAnimal" type="string">
+            <column name="ident_animal" />
+        </property>
+        <property name="tomaGlucemia30" type="java.lang.Integer">
+            <column name="toma_glucemia30" />
+        </property>
+        <property name="tomaGlucemia60" type="java.lang.Integer">
+            <column name="toma_glucemia60" />
+        </property>
+        <property name="tomaGlucemia120" type="java.lang.Integer">
+            <column name="toma_glucemia120" />
+        </property>
+        <property name="tomaGlucemia180" type="java.lang.Integer">
+            <column name="toma_glucemia180" />
+        </property>
+        <property name="promedio" type="string">
+            <column name="promedio" />
+        </property>
+        <property name="usuario" type="string">
+            <column name="usuario" />
+        </property>
+        <property name="fechaRegistro" type="date">
+            <column name="fecha_registro" length="13" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Mantenimiento lote de muestras</ui:define>
+
+    <ui:define name="content">
+        <!-- INICIO FORMULARIO MANTENIMIENTO LOTE DE MUESTRAS -->
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+            <p:panel header="Registrar Mantenimiento de muestras"/>
+            <p:wizard widgetVar="wiz" id="registro" flowListener="#{mbMantenimientoLote.flujoResgistrar}">
+                <p:tab id="general" title="Datos generales">
+                    <p:growl id="mensaje_general_registro" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+                    <p:panel>
+
+                        <!--aca va Datos Generales-->
+                        <h:panelGrid columns="3" cellpadding="2" width="100% !important"> 
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Numero de mantenimiento:" />        
+                                <p:inputText id="nmantenimientos" value="#{mbMantenimientoLote.nManto}" readonly="true" /><br/>
+                            </h:panelGrid>
+
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Nombre de lote"/>
+                                <p:selectOneMenu value="#{mbMantenimientoLote.cod_lote}" required="true" requiredMessage="Seleccione el nombre del Lote">
+                                    <f:selectItem itemLabel="Seleccionar" noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{mbMantenimientoLote.lista_manto_de_hoy(true)}" var="m" itemValue="#{m.lote.idLote}" itemLabel="#{MbLote.lote_por_id(m.lote.idLote).nombreLote}" />
+                                    <p:ajax update="nmantenimientos" event="change"/>
+                                </p:selectOneMenu><br/>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">    
+                                <p:outputLabel value="Preservante"/>
+                                <p:selectOneMenu value="#{mbMantenimientoLote.cod_preservante}" required="true" requiredMessage="Seleccione el Tipo de preservante">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbPreservante.lista_preservante()}" var="pr" itemValue="#{pr.idPreservante}" itemLabel="#{pr.nomPreservante}" />
+                                </p:selectOneMenu><br/>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Mantenimiento completado:" />
+                                <p:selectOneRadio value="#{mbMantenimientoLote.manto.completadoManto}" id="console" unselectable="false" required="true" requiredMessage="Seleccione si el mantenimiento a sido completado o no">
+                                    <f:selectItem itemLabel="Si" itemValue="true" />
+                                    <f:selectItem itemLabel="No" itemValue="false" />
+                                </p:selectOneRadio>
+
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">     
+                                <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                    <p:outputLabel value="Fecha proximo mantenimiento:" />
+                                    <p:calendar style="width: 33%" showOn="button" value="#{mbMantenimientoLote.manto.fechaProxManto}" pattern="dd/MM/yyyy" mask="true" mindate="today" required="true" requiredMessage="Seleccione la fecha para el proximo mantenimiento"/><br/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <!--aca termina Datos generales-->
+
+                    </p:panel>
+                </p:tab>
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel>
+                        <h:panelGrid>
+                            <!--aca va confirmar-->
+                            <h:panelGrid>
+                                <p:outputLabel value="Numero de mantenimiento:" />        
+                                <h:outputText value="#{mbMantenimientoLote.nManto}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:outputLabel value="Nombre de lote:"/>
+                                <h:outputText value="#{MbLote.lote_por_id(mbMantenimientoLote.cod_lote).nombreLote}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid>
+                                <p:outputLabel value="Preservante:"/>
+                                <h:outputText value="#{MbPreservante.nombre_pres_por_ID(mbMantenimientoLote.cod_preservante)}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:outputLabel value="Fecha proximo mantenimiento:" />      
+                                <h:outputText value="#{mbMantenimientoLote.manto.fechaProxManto}" style="font-weight: bold;">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </h:panelGrid>
+
+                            <h:panelGrid>
+                                <p:outputLabel value="Mantenimiento completado:" />
+                                <h:outputText value="#{mbMantenimientoLote.manto.completadoManto == true? 'Si' : 'No'}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+
+                        </h:panelGrid>                     
+                        <!--aca termina confirmar-->
+                        <br/>
+                        <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('general',false)" style="float: right;" class="secondary-btn" update="mensaje" value="Registrar mantenimiento" actionListener="#{mbMantenimientoLote.registrar_nuevo_manto()}" ajax="true" icon="ui-icon-plus" />
+                        <br/><br/>
+                    </p:panel>
+                </p:tab>
+            </p:wizard>
+            <p:blockUI block="F01" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+        <!-- FIN FORMULARIO MANTENIMIENTO LOTE DE MUESTRAS -->
+    </ui:define>
+</ui:composition>

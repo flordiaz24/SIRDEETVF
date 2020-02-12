@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.PerfilInv" table="perfil_inv" schema="public" optimistic-lock="version">
+        <id name="idPerfil" type="int">
+            <column name="id_perfil" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="investigacion" class="sv.ues.dominio.Investigacion" fetch="select">
+            <column name="cod_invest" />
+        </many-to-one>
+        <many-to-one name="perfilInv" class="sv.ues.dominio.PerfilInv" fetch="select">
+            <column name="per_id_perfil" />
+        </many-to-one> 
+       
+        
+        <property name="antecedente" type="string">
+            <column name="antecedente" length="200" />
+        </property>
+        <property name="justificacion" type="string">
+            <column name="justificacion" length="2000" />
+        </property>
+        <property name="planteamiento" type="string">
+            <column name="planteamiento" length="2000" />
+        </property>
+        <property name="objGeneral" type="string">
+            <column name="obj_general" length="2000" />
+        </property>
+        <property name="objEspecifico" type="string">
+            <column name="obj_especifico" length="2000" />
+        </property>
+        <property name="metodologia" type="string">
+            <column name="metodologia" length="2000" />
+        </property>
+        <property name="descResul" type="string">
+            <column name="desc_resul" length="2000" />
+        </property>
+        <property name="presupuesto" type="big_decimal">
+            <column name="presupuesto" precision="15" />
+        </property>
+        <property name="numeroPersona" type="java.lang.Integer">
+            <column name="numero_persona" />
+        </property>
+        <!--<set name="perfilInvs" table="perfil_inv" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="per_id_perfil" />
+            </key>
+            <one-to-many class="sv.ues.dominio.PerfilInv" />
+        </set>-->
+         <one-to-one name="perfilInvs" class="sv.ues.dominio.PerfilInv"
+			constrained="true"></one-to-one>
+        
+        <set name="documentos" table="documento" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_perfil" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Documento" />
+        </set>
+    </class>
+</hibernate-mapping>

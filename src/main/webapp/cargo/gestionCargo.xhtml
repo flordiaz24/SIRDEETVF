@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Listado de cargos</ui:define>
+
+
+    <ui:define name="content">
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="false" sticky="false" life="3000" />
+            <p:panel>
+                <p:dataTable value="#{MbCargo.listCargos()}" id="x" var="cargo" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <f:facet name="header">
+                        Cargos registrados
+                    </f:facet>
+                    <p:column headerText="Nombre Cargo">
+                        <h:outputText value="#{cargo.cargo}" />
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{cargo.descripcion}" />
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{cargo.activo == false? 'Inactivo' : cargo.activo == true ? 'Activo' : 'Inactivo'}" /> 
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <div align="center">
+                            <p:commandButton value="Modificar" class="orange-btn" actionListener="#{MbCargo.modificar(cargo)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod" />
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+            </p:panel>
+
+        </h:form>
+
+        <!--formulario para modificar -->
+
+        <h:form id="formulario_modificar">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:dialog header="Modificar" styleClass="" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true">
+
+                <p:panel style="height: 300px;width: 500px;border: none !important;" rendered="#{not empty MbCargo.selectedCargo}" id="panel_modificar">
+                    <p:wizard widgetVar="wiz" id="modi" flowListener="#{MbCargo.flujomodificar}"> 
+                        <p:tab id="general" title="Datos generales">
+                            <p:growl id="mensaje_general_modificar" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+                            <p:panel>
+                                <h:panelGrid columns="1" cellpadding="5">
+                                    <p:outputLabel value="Nombre rol" />
+                                    <p:inputTextarea  id="cargo" value="#{MbCargo.selectedCargo.cargo}" cols="50" rows="1" maxlength="25" validatorMessage="El nombre debe contener al menos 5 caracteres">
+                                        <f:validateLength minimum="5" />                                  
+                                        <p:keyFilter regEx="/[a-zA-Z ]/i" />
+                                    </p:inputTextarea>
+                                    <p:outputLabel value="Descripcion" />
+                                    <p:inputTextarea maxlength="200" value="#{MbCargo.selectedCargo.descripcion}" cols="50" style="width: 450px" required="true" requiredMessage="Digite la descripcion" validatorMessage="La descripcion debe contener al menos 5 caracteres">
+                                    <f:validateLength minimum="5" />
+                                    <p:keyFilter regEx="/[a-zA-Z ]/i"/>
+                                </p:inputTextarea>
+                                    <p:outputLabel value="Estado" />
+                                    <p:selectOneMenu value="#{MbCargo.selectedCargo.activo}">
+                                        <f:selectItem itemLabel="Activo" itemValue="true"/>
+                                        <f:selectItem itemLabel="Inactivo" itemValue="false" />
+                                    </p:selectOneMenu>
+
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </p:tab >
+                        <p:tab id="confirmar" title="Confirmar">
+                            <p:panel>
+                                <h:panelGrid columns="1" cellpadding="5">
+                                    <p:outputLabel value="Nombre cargo:" />
+                                    <h:outputText value="#{MbCargo.selectedCargo.cargo}" style="font-weight: bold;"/>
+                                    <p:outputLabel value="Descripcion:" />
+                                    <h:outputText value="#{MbCargo.selectedCargo.descripcion}" style="font-weight: bold;"/>
+                                    <p:outputLabel value="Estado:" />
+                                    <h:outputText value="#{MbCargo.selectedCargo.activo == false? 'Inactivo' : 'Activo'}" style="font-weight: bold;"/>
+                                </h:panelGrid>
+                                <div align="center">
+                            <p>
+                                <!--<p:commandButton class="secondary-btn" onclick="PF('dialogoModificar').hide();" ajax="true" value="Cancelar" />
+                                <p:spacer height="10" width="10" />-->
+                                <p:commandButton class="orange-btn" oncomplete="PF('wiz').loadStep('general',false)" actionListener="#{MbCargo.modificarDialog()}" ajax="true" value="Modificar" update="F01:mensaje"/>
+                            </p>
+                        </div>
+                            </p:panel>
+                        </p:tab>
+                       
+                    </p:wizard>
+
+
+                </p:panel>
+            </p:dialog>
+        </h:form>
+
+
+    </ui:define>
+</ui:composition>

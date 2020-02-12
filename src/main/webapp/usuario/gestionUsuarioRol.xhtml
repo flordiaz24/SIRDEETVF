@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestion Usuario Rol</ui:define>
+
+    <ui:define name="content">
+        <h:form id="registros">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel header="Asignar roles a usuarios"/>
+            <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbUsuarioRol.onFlowProcess}">
+               <p:tab id="personal" title="Seleccionar usuario">
+                   <p:dataTable widgetVar="tabla_usuario" value="#{MbUsuarioRol.lista_personas()}" selection="#{MbUsuarioRol.persona}" rowKey="#{usuario.usuario.idUsuario}" id="x" var="usuario" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                       <p:column headerText="Seleccion" selectionMode="single" style="width:70px;text-align:center" />
+                    <p:column headerText="Usuario" filterBy="#{usuario.usuario.nomUsuario}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.usuario.nomUsuario}" />
+                    </p:column>
+                    <p:column headerText="Nombre" filterBy="#{usuario.primerNombre} #{usuario.segundoNombre} #{usuario.primerApellido} #{usuario.segundoApellido}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.primerNombre} #{usuario.segundoNombre} #{usuario.primerApellido} #{usuario.segundoApellido}" />
+                    </p:column>
+                   </p:dataTable>
+               </p:tab>
+                <p:tab id="roles" title="Seleccionar roles">
+                    <p:dataTable value="#{MbUsuarioRol.lista_rol()}" widgetVar="tabla_rol" selection="#{MbUsuarioRol.rolesSeleccionados}" rowKey="#{rol.idRol}"  var="rol" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <p:column headerText="Seleccion" selectionMode="multiple" style="width:70px;text-align:center" />
+                    <p:column headerText="Nombre" filterBy="#{rol.nomRol}" filterMatchMode="contains">
+                        <h:outputText value="#{rol.nomRol}" />
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{rol.descripcion}"/>
+                    </p:column>
+                   </p:dataTable>
+               </p:tab>
+                
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel header="Datos personales">
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Usuario:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbUsuarioRol.persona.usuario.nomUsuario}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Roles a asignar:"/>
+                            </p:column>
+                            <p:column >
+                                <ui:repeat value="#{MbUsuarioRol.rolesPrevios}" var="roles">
+                                    <h:outputText value="#{roles.nomRol}" style="font-weight: bold;"/> <br/>
+                                </ui:repeat>
+                            </p:column>
+                        </h:panelGrid>
+                        <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('personal',false)" actionListener="#{MbUsuarioRol.asignarRoles()}" style="float: right;" class="secondary-btn" update="mensaje" value="Asignar" ajax="true" icon="ui-icon-plus" /> 
+                    <br/><br/>
+                    </p:panel>
+               </p:tab>
+                
+            </p:wizard>
+            <p:blockUI block="registros" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

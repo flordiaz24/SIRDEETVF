@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.BitacoraLab" table="bitacora_lab" schema="public" optimistic-lock="version">
+        <id name="codBitLab" type="int">
+            <column name="cod_bit_lab" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="actividad" class="sv.ues.dominio.Actividad" fetch="select">
+            <column name="cod_actividad" not-null="true" />
+        </many-to-one>
+        <many-to-one name="bitacoraLab" class="sv.ues.dominio.BitacoraLab" fetch="select">
+            <column name="bit_cod_bit_lab" />
+        </many-to-one>
+        <many-to-one name="invVector" class="sv.ues.dominio.InvVector" fetch="select">
+            <column name="id_inv_vector" not-null="true" />
+        </many-to-one>
+        <property name="nomBitLab" type="string">
+            <column name="nom_bit_lab" length="200" not-null="true" />
+        </property>
+        <set name="lotes" table="lote" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_bit_lab" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Lote" />
+        </set>
+        <set name="bitacoraLabs" table="bitacora_lab" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="bit_cod_bit_lab" />
+            </key>
+            <one-to-many class="sv.ues.dominio.BitacoraLab" />
+        </set>
+        <set name="analisisLabs" table="analisis_lab" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_bit_lab" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.AnalisisLab" />
+        </set>
+    </class>
+</hibernate-mapping>

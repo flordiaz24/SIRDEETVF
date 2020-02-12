@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Registrar Lote</ui:define>
+
+    <ui:define name="content">
+        <!-- INICIO FORMULARIO REGISTRAR LOTE -->
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+            <p:panel header="Registrar lote"/>
+            <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbLote.flujoResgistrar}">
+                <p:tab id="general" title="Datos generales">
+                    <p:growl id="mensaje_general_registro" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+                    <p:panel>
+                        <!--aca va Datos Generales-->
+                        <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Nombre del lote:" />
+                                <p:inputText id="nombreLote" value="#{MbLote.lote.nombreLote}" style="text-transform:uppercase;" required="true" requiredMessage="Digite el nombre del Lote" maxlength="50" validatorMessage="El nombre del Lote debe contener al menos 3 caracteres">
+                                    <f:validateLength minimum="3" />
+                                   <p:keyFilter regEx="/[a-zA-Z0-9-/_]/i" /> 
+                                </p:inputText>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Cantidad de muestras:" /> <!-- no esta validado -->
+                                <p:inputNumber id="cant_muestra" value="#{MbLote.lote.numMuestras}" minValue="0" decimalPlaces="0" required="true" requiredMessage="Digite la cantidad de muestras"></p:inputNumber>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <h:outputLabel value="Tipo de preservante" class="label" style="margin-bottom: 0px;"/>
+                                <p:selectOneMenu value="#{MbLote.cod_preservante}" required="true" requiredMessage="Seleccione el Tipo de preservante">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbPreservante.lista_preservante()}" var="pr" itemValue="#{pr.idPreservante}" itemLabel="#{pr.nomPreservante}" />
+                                </p:selectOneMenu><br/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <h:outputLabel value="Nombre del vector" class="label" style="margin-bottom: 0px;"/>
+                                <p:selectOneMenu value="#{MbLote.cod_vector}" required="true" requiredMessage="Seleccione el nombre del Vector">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{mbVector.lista_vectores_invest_activas()}" var="ve" itemValue="#{ve.codVector}" itemLabel="#{ve.nomVector}" />
+                                </p:selectOneMenu><br/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                               <p:outputLabel for="fecha_manto" value="Fecha para mantenimiento"/>
+                               <p:calendar id="fecha_manto" value="#{MbLote.lote.fechaModificacion}" mindate="today" pattern="dd/MM/yyyy" required="true" requiredMessage="Seleccione la fecha para mantenimiento"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Estado" />
+                                <p:selectOneMenu value="#{MbLote.lote.estatus}" required="true" requiredMessage="Seleccione el estado del Lote">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItem itemLabel="Activo" itemValue="1"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="2" />
+                                </p:selectOneMenu>  <br/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <h:outputLabel id="lb_depto" value="Departamento:" class="label" style="margin-bottom: 0px;"/>
+                                <p:selectOneMenu id="som_depto" value="#{MbLote.cod_depto}"  required="true" requiredMessage="Seleccione el departamento">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbLote.lista_departamentos()}" />
+                                    <p:ajax update="txt_depto som_muni txt_muni som_colonia txt_colonia" event="change" listener="#{MbLote.reset_cod_munic_colon()}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Codigo departamento:" />
+                                <p:inputText id="txt_depto" style="width: 33%" value="#{MbLote.cod_depto}">
+                                </p:inputText>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <h:outputLabel id="lb_muni" value="Municipio" class="label" style="margin-bottom: 0px;"/>
+                                <p:selectOneMenu  id="som_muni" value="#{MbLote.cod_munic}"  required="true" requiredMessage="Seleccione el municipio">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbLote.lista_municipios(MbLote.cod_depto)}"/>
+                                    <p:ajax update="txt_muni som_colonia txt_colonia" event="change" listener="#{MbLote.reset_cod_colon()}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Codigo municipio:" />
+                                <p:inputText id="txt_muni" style="width: 33%" value="#{MbLote.cod_munic}">
+                                </p:inputText>
+                            </h:panelGrid> 
+                          
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <h:outputLabel id="lb_colonia" value="Colonia/Canton:" class="label" style="margin-bottom: 0px;"/>
+                                <p:selectOneMenu id="som_colonia" value="#{MbLote.cod_colon}"  required="true" requiredMessage="Seleccione la colonia o canton">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbLote.lista_colonias(MbLote.cod_munic)}"/>
+                                    <p:ajax update="txt_colonia" event="change"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Codigo Colonia/Canton :" />
+                                <p:inputText id="txt_colonia" style="width: 33%" value="#{MbLote.cod_colon}">
+                                </p:inputText>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <!--aca termina Datos generales-->
+                    </p:panel>
+                </p:tab>
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel>
+                        <!--aca va confirmar-->
+                        <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Nombre del lote:" />
+                                <h:outputText value="#{MbLote.lote.nombreLote}" style="font-weight: bold;text-transform: uppercase;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Cantidad de muestras:" />
+                                <h:outputText value="#{MbLote.lote.numMuestras}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Tipo de preservante:"/>
+                                <h:outputText value="#{MbPreservante.nombre_pres_por_ID(MbLote.cod_preservante)}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Nombre del vector:"/>
+                                <h:outputText value="#{mbVector.muestra_vector_por_ID(MbLote.cod_vector)}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Fecha para mantenimiento:" />
+                                <h:outputText value="#{MbLote.lote.fechaModificacion}" style="font-weight: bold;">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Estado:" />
+                                <h:outputText value="#{MbLote.lote.estatus == 1? 'Activo' : 'Inactivo'}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Departamento:"/>
+                                <h:outputText value="#{MbLote.depto_por_id(MbLote.cod_depto).nomDepto}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Codigo departamento:"/>
+                                <h:outputText value="#{MbLote.cod_depto}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Municipio:"/>
+                                <h:outputText value="#{MbLote.municipio_por_id(MbLote.cod_munic).nomMunicipio}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Codigo municipio:"/>
+                                <h:outputText value="#{MbLote.cod_munic}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Colonia/Canton:"/>
+                                <h:outputText value="#{MbLote.colonia_por_id(MbLote.cod_colon).nomUbicacion}" style="font-weight: bold;"/>
+
+                                <p:outputLabel value="Colonia/Canton:"/>
+                                <h:outputText value="#{mbColonia.coloniaSele.nomUbicacion}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                <p:outputLabel value="Codigo colonia/canton:"/>
+                                <h:outputText value="#{MbLote.cod_colon}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <!--aca termina confirmar-->
+                        <br/>
+                        <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('general',false)" style="float: right;" class="secondary-btn" update="mensaje" value="Registrar lote" actionListener="#{MbLote.registrar_lote()}" ajax="true" icon="ui-icon-plus" />
+                        <br/><br/>
+                    </p:panel>
+                </p:tab>
+            </p:wizard>
+            <p:blockUI block="F01" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+        <!-- FIN FORMULARIO REGISTRAR LOTE -->
+    </ui:define>
+</ui:composition>

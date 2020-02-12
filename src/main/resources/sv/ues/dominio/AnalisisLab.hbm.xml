@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.AnalisisLab" table="analisis_lab" schema="public" optimistic-lock="version">
+        <id name="idAnalisis" type="int">
+            <column name="id_analisis" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="bitacoraLab" class="sv.ues.dominio.BitacoraLab" fetch="select">
+            <column name="cod_bit_lab" not-null="true" />
+        </many-to-one>
+        <many-to-one name="muestra" class="sv.ues.dominio.Muestra" fetch="select">
+            <column name="codigo_muestra" length="50" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tipoPrueba" class="sv.ues.dominio.TipoPrueba" fetch="select">
+            <column name="id_tipo_prueba" not-null="true" />
+        </many-to-one>
+        <property name="fechaAnalisis" type="date">
+            <column name="fecha_analisis" length="13" />
+        </property>
+        <property name="estadoAna" type="java.lang.Boolean">
+            <column name="estado_ana" />
+        </property>
+        <set name="animals" table="animal" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_analisis" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Animal" />
+        </set>
+        <set name="tratamientos" table="tratamiento" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_analisis" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Tratamiento" />
+        </set>
+    </class>
+</hibernate-mapping>

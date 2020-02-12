@@ -1,0 +1,72 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/serenity">
+
+    <div class="layout-topbar">
+        <a href="dashboard.xhtml" class="topbar-logo">
+            <p:graphicImage name="images/logo.png"  />
+            <span class="app-name">SERENITY</span>
+        </a>
+
+        <p:graphicImage name="images/logo.png"  styleClass="mobile-logo" />
+
+        <a href="#" class="menu-btn">
+            <i class="material-icons">&#xE5D2;</i>
+        </a>
+
+        <a href="#" class="topbar-menu-btn">
+            <i class="material-icons">&#xE853;</i>
+        </a>
+
+        <div class="layout-topbar-menu-wrapper">
+            <div class="sidebar-logo">
+                <a href="dashboard.xhtml">
+                    <p:graphicImage name="images/logo.png" />
+                    <span class="app-name">SERENITY</span>
+                </a>
+                <a href="#" class="sidebar-anchor" title="Toggle Menu"></a>
+            </div>            
+            <ul class="topbar-menu animated">
+                <li class="profile-item" style="padding-top: 18px;">
+                    <a href="#">                    
+                        <span style="font-size: 20px;font-weight: bold;" class="topbar-item-name profile-name">SIRDEETV</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#">
+                        <i class="topbar-icon material-icons">&#xE8B8;</i>
+                        <span class="topbar-item-name">Configuracion</span>
+                    </a>
+                    <ul class="animated">
+                        <li role="menuitem">
+                            <a href="#{LoginBean.cambiarPasswordUSR()}">
+                                <i class="material-icons">&#xE897;</i>
+                                <span>Cambiar password</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="material-icons">&#xE8AC;</i>
+                                <span>Cerrar sesion</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li style="padding-top: 7px;">
+                    <a >                    
+                        <span style="font-size: 14px;font-weight: bold;">#{LoginBean.usuario.nomUsuario}</span>
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+
+</ui:composition>

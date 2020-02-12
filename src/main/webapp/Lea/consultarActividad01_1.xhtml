@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Consulta - Efecto Hipoglucemiante - Efecto Inmediato Sobre la Glucemia</ui:define>
+    <ui:define name="content">
+        
+            
+        
+        <h:form id="formulario_consultar">
+            
+                    <p:panel >
+                        
+                        <h:panelGrid style="width: 100%;" columns="2" cellpadding="10">
+                            <p:column>
+                                <div align = "left">
+                                    <strong>LABORATORIO DE EXPERIMENTACION ANIMAL</strong> <br/>
+                                <strong>CENTRO DE INVESTIGACION Y DESARROLLO EN SALUD</strong> <br/>
+                                <strong>UNIVERSIDAD DE EL SALVADOR</strong> <br/>
+                            </div>
+                            </p:column>
+                            <p:column>
+                                <div align = "right">
+                                <strong>EFECTO HIPOGLUCEMIANTE</strong> <br/>
+                                <strong>EFECTO INMEDIATO SOBRE LA GLUCEMIA</strong> <br/>
+                            </div>
+                            </p:column>
+                            
+                            
+                        </h:panelGrid>
+                        
+                        
+                        <h:panelGrid style="width: 100%;" columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Sustancia de ensayo:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.sustanciaDeEnsayo}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Via de administracion:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.viaDeAdministracion}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Concentracion o dosis:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.concentracionDeDosis}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="N° de jaula:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.NJaula}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="N° del/los animales:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.NDelLosAnimales}"/></strong>
+                                </p:column>
+                            
+                                <p:column >
+                                    <h:outputText value="Sexo:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.sexo}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Especie:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.especie}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Cepa:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.cepa}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Edad:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.edad}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.fecha}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Grupo:" />
+                                    <h:panelGrid columns="6" style="margin-bottom:10px" cellpadding="5">
+                                        <h:outputText value="Control: " />
+                                        <p:selectBooleanCheckbox disabled="true" value="#{MbActividad01.actividadEncabezadoConsultar.control}"/>
+                                        <h:outputText value="Patron: " />
+                                        <p:selectBooleanCheckbox disabled="true" value="#{MbActividad01.actividadEncabezadoConsultar.patron}"/>
+                                        <h:outputText value="Tratamiento: " />
+                                        <p:selectBooleanCheckbox  disabled="true" value="#{MbActividad01.actividadEncabezadoConsultar.tratamiento}"/>
+                                    </h:panelGrid>
+                                </p:column>
+                            
+                            
+                        </h:panelGrid>
+                      
+                           <p:dataTable rowIndexVar="idtabla" id="tabla2" widgetVar="regw2" var="reg2" value="#{MbActividad01.lsactividad01Consultar}" emptyMessage="Sin datos">
+                              <f:facet name="header">
+                                  <b>EFECTO INMEDIATO SOBRE GLUCEMIA</b>
+                                </f:facet> 
+                               <p:column headerText="IDENT ANIMAL">
+                                   <h:outputText value="A#{idtabla+1}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [30 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia30}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [60 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia60}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [120 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia120}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [180 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia180}" />
+                                </p:column>
+                               <p:column headerText="PROMEDIO">
+                                   <h:outputText value="#{reg2.promedio}" />
+                                </p:column>
+                           </p:dataTable>
+                      
+                        <h:panelGrid columns="1" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Responsable:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezadoConsultar.responsableDePrueba}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Observaciones:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:inputTextarea cols="100" rows="5" disabled="true" value="#{MbActividad01.actividadEncabezadoConsultar.observacionesPie}"/>
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                    
+            
+        </h:form>
+        <br/> <br/>
+        <div align = "right">
+            <p:commandButton  value="Imprimir" type="button" style="display:block;margin-bottom: 20px">
+                    <p:printer  target="formulario_consultar" />
+                </p:commandButton>
+        </div>
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </ui:define>
+</ui:composition>

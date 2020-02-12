@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Documento" table="documento" schema="public" optimistic-lock="version">
+        <id name="idDoc" type="int">
+            <column name="id_doc" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="documento" class="sv.ues.dominio.Documento" fetch="select">
+            <column name="doc_id_doc" />
+        </many-to-one>
+        <many-to-one name="perfilInv" class="sv.ues.dominio.PerfilInv" fetch="select">
+            <column name="id_perfil" not-null="true" />
+        </many-to-one>
+        <property name="tituloDoc" type="string">
+            <column name="titulo_doc" length="100" not-null="true" />
+        </property>
+        <property name="descDoc" type="string">
+            <column name="desc_doc" length="200" />
+        </property>
+        <property name="rutaUrl" type="string">
+            <column name="ruta_url" length="500" not-null="true" />
+        </property>
+        <property name="estadoDoc" type="java.lang.Boolean">
+            <column name="estado_doc" />
+        </property>
+        <set name="documentos" table="documento" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="doc_id_doc" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Documento" />
+        </set>
+    </class>
+</hibernate-mapping>

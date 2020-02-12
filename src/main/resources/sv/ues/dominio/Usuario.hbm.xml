@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 08-22-2019 08:34:31 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Usuario" table="usuario" schema="public" optimistic-lock="version">
+        <id name="idUsuario" type="int">
+            <column name="id_usuario" />
+            <generator class="identity" />
+        </id>
+        <!--<many-to-one name="cargo" class="sv.ues.dominio.Cargo" fetch="select" >-->
+        <many-to-one name="cargo" class="sv.ues.dominio.Cargo" fetch="select" lazy="false">
+            <column name="id_cargo" not-null="false" />
+        </many-to-one>
+        <property name="nomUsuario" type="string">
+            <column name="nom_usuario" length="150" not-null="false" />
+        </property>
+        <!--<property name="email" type="string">
+            <column name="email" length="200" not-null="false" />
+        </property>-->
+        <property name="clave" type="string">
+            <column name="clave" length="200" not-null="false" />
+        </property>
+        <property name="activo" type="boolean">
+            <column name="activo" not-null="true" />
+        </property>
+        <!--<set name="personas" table="persona" inverse="true" lazy="true" fetch="select">-->
+        <!--<set name="personas" table="persona" inverse="true" lazy="true" fetch="select">-->
+        <set name="personas" table="persona" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_usuario" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Persona" />
+        </set>
+        
+        <set name="laboratorios" table="laboratorio" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_usuario" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Laboratorio" />
+        </set>
+        
+        <!--<set name="rols" table="usuario_rol" inverse="true" lazy="true" fetch="select">-->
+        <!--<set name="rols" table="usuario_rol" inverse="false" fetch="select" lazy="true">-->
+        
+        <set name="rols" table="usuario_rol" inverse="false" fetch="select" lazy="false">
+            <key>
+                <column name="id_usuario" not-null="false" />
+            </key>
+            <many-to-many entity-name="sv.ues.dominio.Rol">
+                <column name="id_rol" not-null="true" />
+            </many-to-many>
+        </set>
+        
+        
+        
+        <property name="fechaRegistro" type="date">
+            <column name="fecha_registro" length="13" not-null="false" />
+        </property>
+        <property name="fechaUltimaModificacion" type="date">
+            <column name="fecha_ultima_modificacion" length="13" not-null="false" />
+        </property>
+        <property name="hash" type="string">
+            <column name="hash" length="200" not-null="false" />
+        </property>
+    </class>
+</hibernate-mapping>

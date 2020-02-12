@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Vector" table="vector" schema="public" optimistic-lock="version">
+        <id name="codVector" type="int">
+            <column name="cod_vector" />
+            <generator class="identity" />
+        </id>
+        <property name="nomVector" type="string">
+            <column name="nom_vector" length="200" not-null="true" />
+        </property>
+        <property name="descVector" type="string">
+            <column name="desc_vector" length="200" />
+        </property>
+        <set name="invVectors" table="inv_vector" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_vector" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.InvVector" />
+        </set>
+        <many-to-one name="familia" class="sv.ues.dominio.Familia" fetch="select">
+            <column name="id_familia" />
+        </many-to-one>
+        <property name="nomCientifico" type="string">
+            <column name="nom_cientifico" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

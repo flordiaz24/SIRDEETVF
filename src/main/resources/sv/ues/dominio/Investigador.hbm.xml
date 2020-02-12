@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Investigador" table="investigador" schema="public" optimistic-lock="version">
+        <id name="idInv" type="int">
+            <column name="id_inv" />
+            <generator class="identity" />
+        </id>
+        <property name="nomInv" type="string">
+            <column name="nom_inv" length="200" not-null="true" />
+        </property>
+        <property name="tipoInv" type="string">
+            <column name="tipo_inv" length="200" not-null="true" />
+        </property>
+        <set name="investigacions" table="investigacion_investigador" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_inv" not-null="true" />
+            </key>
+            <many-to-many entity-name="sv.ues.dominio.Investigacion">
+                <column name="cod_invest" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

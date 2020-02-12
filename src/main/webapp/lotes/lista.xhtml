@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="title">Gestion Mantenimiento</ui:define>
+
+    <ui:define name="content">
+
+        <!-- INICIO FORMULARIO LOTES REGISTRADOS -->
+        <h:form id="lotesRegistrados">
+            
+            <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                <p:outputLabel value="Nombre del lote:" />
+                <p:selectOneMenu value="#{mbMantenimientoLote.cod_lote}">
+                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                    <f:selectItems value="#{MbLote.lista_lote_activos_inactivos(1)}" var="ve" itemValue="#{ve.idLote}" itemLabel="#{ve.nombreLote}" />
+                    <p:ajax update="listaMan" event="change"/>
+                </p:selectOneMenu><br/>  
+            </h:panelGrid>
+         
+            <p:dataTable id="listaMan" emptyMessage="No se han encontrado registros" var="ma" value="#{mbMantenimientoLote.lista_mantenimientos_por_lote(mbMantenimientoLote.cod_lote)}">
+                                <p:column headerText="Fecha mantenimiento">
+                                    <h:outputText value="#{ma.fechaManto}" />
+                                </p:column>
+                  
+                                <p:column headerText="Fecha próximo mantenimiento">
+                                    <h:outputText value="#{ma.fechaProxManto}" />
+                                </p:column>
+                  
+                                <p:column headerText="Numero de Mantenimiento">
+                                    <h:outputText value="#{ma.numeroMantenimiento}" />
+                                </p:column>
+                  
+                                <p:column headerText="Mantenimiento completado">
+                                    <h:outputText value="#{ma.completadoManto == true? 'Si' : 'No'}" style="font-weight: bold;"/>
+                                </p:column>
+                  
+                                <p:column headerText="Preservante usado">
+                                    <h:outputText value="#{MbPreservante.nombre_pres_por_ID(ma.preservante.idPreservante)}" />
+                                </p:column>
+                  
+                        <p:column headerText="Acciones">
+                            <p:commandButton value="Consultar" class="blue-grey-btn" style="margin-right: 10px;" actionListener="#{mbMantenimientoLote.setManto(ma)}" oncomplete="PF('dialogoConsultar').show();" update="formulario_consultar:dlgMod" />
+                            <p:commandButton value="Modificar" class="orange-btn" actionListener="#{mbMantenimientoLote.setManto(ma)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod"  />
+                        </p:column>
+              </p:dataTable>
+        </h:form>
+        <!-- FIN FORMULARIO ROLES REGISTRADOS -->
+        
+        <!--   INICIO FORMULARIO MODIFICAR ROL -->
+        <h:form id="formulario_modificar">
+            <p:dialog header="Modificar" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true">
+                <p:panel style="border: none !important;" rendered="#{not empty mbMantenimientoLote.manto}" id="panel_modificar">
+                   <p:outputLabel value="Fecha Mantenimiento:" />
+                    <br/>
+                    <p:inputText value="#{mbMantenimientoLote.manto.fechaManto}" type="date">
+                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="America/El_Salvador" />
+                    </p:inputText>
+                    <br/> 
+                    <br/>
+                    <p:outputLabel value="Fecha proximo mantenimiento" />
+                    <br/>
+                    <p:inputText value="#{mbMantenimientoLote.manto.fechaProxManto}" type="date">
+                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="America/El_Salvador" />
+                    </p:inputText>
+                    <br/>
+                    <p:outputLabel value="Numero de mantenimiento" />
+                    <br/>
+                    <p:inputText value="#{mbMantenimientoLote.manto.numeroMantenimiento}" type="number">
+                        
+                    </p:inputText>
+                     <br/>
+                    <p:outputLabel value="Mantenimiento completado" />
+                    <br/>
+                    <p:selectBooleanCheckbox value="#{mbMantenimientoLote.manto.completadoManto}"  />
+                    
+                     <br/>
+                    <p:outputLabel value="Preservante usado" />
+                    <br/>
+                    
+                    <p:selectOneMenu value="#{mbMantenimientoLote.idPreservante}" >
+                        <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                        <f:selectItems value="#{MbPreservante.lista_preservante()}" var="pr" itemValue="#{pr.idPreservante}" itemLabel="#{pr.nomPreservante}" />
+                    </p:selectOneMenu> 
+                    <br/>
+                    <br/>
+                    <div align="center">
+                        <p>
+                            <p:commandButton class="secondary-btn" onclick="PF('dialogoModificar').hide();" ajax="true" value="Cancelar" />
+                            <p:spacer height="10" width="10" />
+                            <p:commandButton class="orange-btn" actionListener="#{mbMantenimientoLote.modificarMantenimiento()}" ajax="true" value="Modificar" update="lotesRegistrados:listaMan" />
+                        </p>
+                    </div>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+        <!-- FIN FORMULARIO CONSULTAR ROL -->
+        <h:form id="formulario_consultar">
+            <p:dialog header="Consultar" widgetVar="dialogoConsultar" id="dlgMod" resizable="false" modal="true">
+                <p:panel style="border: none !important;" rendered="#{not empty mbMantenimientoLote.manto}" id="panel_consultar">
+                    <p:outputLabel value="Fecha Mantenimiento:" />
+                    <br/>
+                    <p:inputText value="#{mbMantenimientoLote.manto.fechaManto}" readonly="true">
+                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="America/El_Salvador" />
+                    </p:inputText>
+                    <br/> 
+                    <br/>
+                    <p:outputLabel value="Fecha proximo mantenimiento" />
+                    <br/>
+                    <p:inputText value="#{mbMantenimientoLote.manto.fechaProxManto}" readonly="true">
+                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="America/El_Salvador" />
+                    </p:inputText>
+                    <br/>
+                    <p:outputLabel value="Numero de mantenimiento" />
+                    <br/>
+                    <p:inputText value="#{mbMantenimientoLote.manto.numeroMantenimiento}" readonly="true">
+                        
+                    </p:inputText>
+                     <br/>
+                    <p:outputLabel value="Mantenimiento completado" />
+                    <br/>
+                    <p:inputText value="SI" rendered="#{mbMantenimientoLote.manto.completadoManto}" />
+                    <p:inputText value="NO" rendered="#{!mbMantenimientoLote.manto.completadoManto}" />
+                    
+                    
+                     <br/>
+                    <p:outputLabel value="Preservante usado" />
+                    <br/>
+                    
+                    <p:inputText value="#{MbPreservante.nombre_pres_por_ID(mbMantenimientoLote.manto.preservante.idPreservante)}" readonly="true" />
+                </p:panel>
+            </p:dialog>
+        </h:form>
+
+        
+    </ui:define>
+</ui:composition>
+

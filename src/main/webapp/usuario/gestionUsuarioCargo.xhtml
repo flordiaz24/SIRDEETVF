@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestion Usuario Cargo</ui:define>
+
+    <ui:define name="content">
+        <h:form id="registros">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel header="Asignar cargo a usuarios"/>
+            <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbUsuarioCargo.onFlowProcess}">
+               <p:tab id="personal" title="Seleccionar usuario" >
+                   <p:dataTable widgetVar="tabla_usuario" value="#{MbUsuarioCargo.lista_personas()}" selection="#{MbUsuarioCargo.persona}" rowKey="#{usuario.usuario.idUsuario}" id="x" var="usuario" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                       <p:column headerText="Seleccion" selectionMode="single" style="width:70px;text-align:center" />
+                    <p:column headerText="Usuario" filterBy="#{usuario.usuario.nomUsuario}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.usuario.nomUsuario}" />
+                    </p:column>
+                    <p:column headerText="Nombre" filterBy="#{usuario.primerNombre} #{usuario.segundoNombre} #{usuario.primerApellido} #{usuario.segundoApellido}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.primerNombre} #{usuario.segundoNombre} #{usuario.primerApellido} #{usuario.segundoApellido}" />
+                    </p:column>
+                   </p:dataTable>
+               </p:tab>
+                <p:tab id="roles" title="Seleccionar cargo">
+                    
+                    <p:dataTable value="#{MbUsuarioCargo.lista_rol()}" widgetVar="tabla_rol" selection="#{MbUsuarioCargo.rolesSeleccionados}"
+                                 rowKey="#{rol.idCargo}"  var="rol" paginator="true" rows="10">
+                        
+                    <p:column headerText="Seleccion" selectionMode="single" style="width:70px;text-align:center" />
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{rol.cargo}" />
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{rol.descripcion}"/>
+                    </p:column>
+                   </p:dataTable>
+                    
+                    
+                    
+               </p:tab>
+                
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel header="Datos personales">
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Usuario:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbUsuarioCargo.persona.usuario.nomUsuario}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Cargo a asignar:"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{MbUsuarioCargo.rolesSeleccionados.cargo}" style="font-weight: bold;"/> <br/>
+                            </p:column>
+                        </h:panelGrid>
+                        <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('personal',false)" actionListener="#{MbUsuarioCargo.asignarRoles()}" style="float: right;" class="secondary-btn" update="mensaje" value="Asignar" ajax="true" icon="ui-icon-plus" /> 
+                    <br/><br/>
+                    </p:panel>
+               </p:tab>
+                
+            </p:wizard>
+            <p:blockUI block="registros" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+    </ui:define>
+</ui:composition>

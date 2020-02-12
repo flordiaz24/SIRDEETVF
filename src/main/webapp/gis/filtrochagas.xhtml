@@ -1,0 +1,15 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+    <h:form>
+
+        <p:panel header="Seleccione un Vector" style="margin-bottom:10px; max-height: 50%">
+            <h:selectOneMenu value="Seleccione un vector">
+                <f:selectItems value="#{mbVector.lista_vector()}" var="x" itemLabel="#{x.nomVector}" itemValue="#{x.codVector}" />
+            </h:selectOneMenu>
+            
+        </p:panel>
+    </h:form>
+    <!--CSS-->
+</ui:composition>

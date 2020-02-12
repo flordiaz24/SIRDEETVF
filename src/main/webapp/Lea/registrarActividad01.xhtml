@@ -1,0 +1,362 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Registro - Efecto Hipoglucemiante - Efecto Inmediato Sobre la Glucemia</ui:define>
+    <ui:define name="content">
+        <h:form id="F01">
+            <p:growl id="mensaje_general" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+            <p:panel header="Registrar Actividad"/>
+               <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbActividad01.flujoResgistrar}">
+                   
+                <p:tab id="investigacion" title="Seleccionar investigacion" >
+                    <p:growl id="mensaje_investigacion" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                    <p:dataTable widgetVar="tabla_usuario" value="#{MbActividad01.lista_investigaciones()}" selection="#{MbActividad01.investigacion}" rowKey="#{usuario.codInvest}" id="x" var="usuario" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                       <p:column headerText="Seleccion" selectionMode="single" style="width:70px;text-align:center" />
+                       <p:column headerText="Codigo de investigacion" filterBy="#{usuario.codInvest}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.codInvest}" />
+                    </p:column>
+                       <p:column headerText="Investigacion" filterBy="#{usuario.nomInvest}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.nomInvest}" />
+                    </p:column>
+                       
+                       <p:column headerText="Mes" filterBy="#{usuario.mes}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.mes}" />
+                    </p:column>
+                       
+                       <p:column headerText="Año" filterBy="#{usuario.anio}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.anio}" />
+                    </p:column>
+                       
+                   </p:dataTable>
+               </p:tab>
+                   
+                   
+                   
+                   
+                   
+                   
+                   <p:tab id="datos_generales" title="Datos generales">
+                    <p:growl id="mensaje_personal" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                    <p:panel>
+                        <h:panelGrid columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Sustancia de ensayo:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.sustanciaDeEnsayo}" required="true" requiredMessage="Digite la sustancia de ensayo" maxlength="50" validatorMessage="Sustancia de ensayo no contiene una longitud adecuada">
+                                        <f:validateLength minimum="2" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Via de administracion:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.viaDeAdministracion}" required="true" requiredMessage="Digite la via de administracion" maxlength="15" validatorMessage="Via de administracion no contiene una longitud adecuada">
+                                        <f:validateLength minimum="2" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Concentracion o dosis:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.concentracionDeDosis}" required="true" requiredMessage="Digite la concentracion/dosis" maxlength="15" validatorMessage="La concentracion/dosis no contiene una longitud adecuada">
+                                        <f:validateLength minimum="3" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="N° de jaula:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.NJaula}" required="true" requiredMessage="Digite el N° de jaula" maxlength="10" validatorMessage="N° de jaula no contiene una longitud adecuada">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="N° del/los animales:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.NDelLosAnimales}" required="true" requiredMessage="Digite el N° del/los animales" maxlength="10" validatorMessage="N° del/los animales no contiene una longitud adecuada">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                </p:column>
+                            
+                                <p:column >
+                                    <h:outputText value="Sexo:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.sexo}" required="true" requiredMessage="Digite el sexo" maxlength="10" validatorMessage="Sexo no contiene una longitud adecuada">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Especie:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.especie}" required="true" requiredMessage="Digite la especie" maxlength="10" validatorMessage="Especie no contiene una longitud adecuada">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Cepa:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.cepa}" required="true" requiredMessage="Digite la cepa" maxlength="10" validatorMessage="Cepa no contiene una longitud adecuada">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Edad:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.edad}" required="true" requiredMessage="Digite la edad" maxlength="10" validatorMessage="Edad no contiene una longitud adecuada">
+                                        <f:validateLength minimum="1" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:calendar value="#{MbActividad01.actividadEncabezado.fecha}" locale="es" navigator="true"  pattern="dd-MM-yyyy" mask="true" required="true" requiredMessage="Digite la fecha"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Grupo:" />
+                                    <h:panelGrid columns="6" style="margin-bottom:10px" cellpadding="5">
+                                        <h:outputText value="Control: " />
+                                        <p:selectBooleanCheckbox value="#{MbActividad01.actividadEncabezado.control}"/>
+                                        <h:outputText value="Patron: " />
+                                        <p:selectBooleanCheckbox value="#{MbActividad01.actividadEncabezado.patron}"/>
+                                        <h:outputText value="Tratamiento: " />
+                                        <p:selectBooleanCheckbox value="#{MbActividad01.actividadEncabezado.tratamiento}"/>
+                                    </h:panelGrid>
+                                </p:column>
+                            
+                            
+                        </h:panelGrid>
+                        
+                    </p:panel>
+                    
+                </p:tab>
+                   <p:tab id="datos_actividad" title="Datos de la actividad">
+                       <p:growl id="mensaje_datos_actividad" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                       <p:panel>
+                           <h:panelGrid id="pg" columns="4" cellpadding="10">
+                               <p:column >
+                                   <h:outputText value="TOMA DE GLUCEMIA [30 MIN]:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText id="t30" value="#{MbActividad01.actividad01.tomaGlucemia30}" maxlength="8" validatorMessage="Toma de glucemia no contiene una longitud adecuada">
+                                        <p:keyFilter regEx="/[0-9]/i" />
+                                        <p:ajax update="t30h" event="blur" />
+                                    </p:inputText>
+                                    <h:inputHidden id="t30h" value="#{MbActividad01.actividad01.tomaGlucemia30}"/>
+                               </p:column>
+                               <p:column >
+                                   <h:outputText value="TOMA DE GLUCEMIA [60 MIN]:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText id="t60" value="#{MbActividad01.actividad01.tomaGlucemia60}" maxlength="8" validatorMessage="Toma de glucemia no contiene una longitud adecuada">
+                                        <p:keyFilter regEx="/[0-9]/i" />
+                                        <p:ajax update="t60h" event="blur" />
+                                    </p:inputText>
+                                    <h:inputHidden id="t60h" value="#{MbActividad01.actividad01.tomaGlucemia60}"/>
+                               </p:column>
+                               <p:column >
+                                   <h:outputText value="TOMA DE GLUCEMIA [120 MIN]:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText id="t120" value="#{MbActividad01.actividad01.tomaGlucemia120}" maxlength="8" validatorMessage="Toma de glucemia no contiene una longitud adecuada">
+                                        <p:keyFilter regEx="/[0-9]/i" />
+                                        <p:ajax update="t120h" event="blur" />
+                                    </p:inputText>
+                                    <h:inputHidden id="t120h" value="#{MbActividad01.actividad01.tomaGlucemia120}"/>
+                               </p:column>
+                               <p:column >
+                                   <h:outputText value="TOMA DE GLUCEMIA [180 MIN]:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText id="t180" value="#{MbActividad01.actividad01.tomaGlucemia180}" maxlength="8" validatorMessage="Toma de glucemia no contiene una longitud adecuada">
+                                        <p:keyFilter regEx="/[0-9]/i" />
+                                        <p:ajax update="t180h" event="blur" />
+                                    </p:inputText>
+                                    <h:inputHidden id="t180h" value="#{MbActividad01.actividad01.tomaGlucemia180}"/>
+                               </p:column>
+                           </h:panelGrid>
+                           <p:commandButton process="@this" onclick="PF('bui').show()" update="tabla pg"  oncomplete="PF('bui').hide();" actionListener="#{MbActividad01.agregar()}" style="float: right;" class="secondary-btn"  value="Agregar" ajax="true" icon="ui-icon-plus" />    
+                           <br/><br/>
+                           
+                           
+                           <p:dataTable rowIndexVar="idtabla" id="tabla" widgetVar="regw" var="reg" value="#{MbActividad01.lsactividad01}" emptyMessage="Sin datos">
+                              <f:facet name="header">
+                                  <b>EFECTO INMEDIATO SOBRE GLUCEMIA</b>
+                                </f:facet> 
+                               <p:column>
+                                   <h:outputText value="A#{idtabla+1}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [30 MIN]">
+                                   <h:outputText value="#{reg.tomaGlucemia30}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [60 MIN]">
+                                   <h:outputText value="#{reg.tomaGlucemia60}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [120 MIN]">
+                                   <h:outputText value="#{reg.tomaGlucemia120}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [180 MIN]">
+                                   <h:outputText value="#{reg.tomaGlucemia180}" />
+                                </p:column>
+                               <p:column headerText="PROMEDIO">
+                                   <h:outputText value="#{reg.promedio}" />
+                                </p:column>
+                               <p:column>
+                                   <div align="center">
+                                       <p:commandButton icon="ui-icon-close" value="Eliminar" actionListener="#{MbActividad01.remover(reg)}" update="tabla" />
+                                   </div>
+                                   
+                                </p:column>
+                           </p:dataTable>
+                           
+                           
+                           
+                       </p:panel>
+                   </p:tab>
+                   
+                   <p:tab id="observaciones" title="Datos secundarios">
+                    <p:growl id="mensaje_observaciones" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                    <p:panel>
+                        <h:panelGrid columns="1" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Responsable:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbActividad01.actividadEncabezado.responsableDePrueba}" style="width: 450px" required="true" requiredMessage="Digite el responsable" maxlength="50" validatorMessage="El responsable no contiene una longitud adecuada">
+                                        <f:validateLength minimum="2" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Observaciones:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputTextarea maxlength="1000" value="#{MbActividad01.actividadEncabezado.observacionesPie}" cols="50" rows="5" style="width: 450px" >
+                                    </p:inputTextarea>
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                   
+                <p:tab id="confirmar" title="Confirmar">
+                    
+                    <p:panel >
+                        <h:panelGrid columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Sustancia de ensayo:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.sustanciaDeEnsayo}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Via de administracion:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.viaDeAdministracion}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Concentracion o dosis:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.concentracionDeDosis}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="N° de jaula:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.NJaula}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="N° del/los animales:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.NDelLosAnimales}"/></strong>
+                                </p:column>
+                            
+                                <p:column >
+                                    <h:outputText value="Sexo:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.sexo}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Especie:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.especie}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Cepa:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.cepa}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Edad:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.edad}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha:" />
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.fecha}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Grupo:" />
+                                    <h:panelGrid columns="6" style="margin-bottom:10px" cellpadding="5">
+                                        <h:outputText value="Control: " />
+                                        <p:selectBooleanCheckbox disabled="true" value="#{MbActividad01.actividadEncabezado.control}"/>
+                                        <h:outputText value="Patron: " />
+                                        <p:selectBooleanCheckbox disabled="true" value="#{MbActividad01.actividadEncabezado.patron}"/>
+                                        <h:outputText value="Tratamiento: " />
+                                        <p:selectBooleanCheckbox  disabled="true" value="#{MbActividad01.actividadEncabezado.tratamiento}"/>
+                                    </h:panelGrid>
+                                </p:column>
+                            
+                            
+                        </h:panelGrid>
+                      
+                           <p:dataTable rowIndexVar="idtabla" id="tabla2" widgetVar="regw2" var="reg2" value="#{MbActividad01.lsactividad01}" emptyMessage="Sin datos">
+                              <f:facet name="header">
+                                  <b>EFECTO INMEDIATO SOBRE GLUCEMIA</b>
+                                </f:facet> 
+                               <p:column>
+                                   <h:outputText value="A#{idtabla+1}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [30 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia30}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [60 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia60}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [120 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia120}" />
+                                </p:column>
+                               <p:column headerText="TOMA DE GLUCEMIA [180 MIN]">
+                                   <h:outputText value="#{reg2.tomaGlucemia180}" />
+                                </p:column>
+                               <p:column headerText="PROMEDIO">
+                                   <h:outputText value="#{reg2.promedio}" />
+                                </p:column>
+                           </p:dataTable>
+                      
+                        <h:panelGrid columns="1" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Responsable:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <strong><h:outputText value="#{MbActividad01.actividadEncabezado.responsableDePrueba}"/></strong>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Observaciones:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:inputTextarea cols="100" rows="5" disabled="true" value="#{MbActividad01.actividadEncabezado.observacionesPie}"/>
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('datos_generales',false)" actionListener="#{MbActividad01.registrar2()}" style="float: right;" class="secondary-btn"  value="Registrar" ajax="true" icon="ui-icon-plus" />    
+                    <br/><br/>
+                </p:tab>
+            </p:wizard>
+            <p:blockUI block="F01" widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Actividad" table="actividad" schema="public" optimistic-lock="version">
+        <id name="codActividad" type="int">
+            <column name="cod_actividad" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="investigacion" class="sv.ues.dominio.Investigacion" fetch="select">
+            <column name="cod_invest" />
+        </many-to-one>
+        <property name="nomActividad" type="string">
+            <column name="nom_actividad" length="200" />
+        </property>
+        <property name="descActividad" type="string">
+            <column name="desc_actividad" length="200" />
+        </property>
+        <set name="bitacoraLabs" table="bitacora_lab" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_actividad" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.BitacoraLab" />
+        </set>
+    </class>
+</hibernate-mapping>

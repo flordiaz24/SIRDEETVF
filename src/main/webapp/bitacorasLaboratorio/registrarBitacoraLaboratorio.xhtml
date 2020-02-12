@@ -1,0 +1,234 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Registrar Nueva Bitacora</ui:define>
+    <ui:define name="content">
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel header="Registrar Nueva Bitacora"/>
+                <p:wizard widgetVar="wiz" id="registro">
+               <p:tab id="personal" title="Datos personales">
+                    <p:panel>
+                        <p:growl/>
+                        <h:panelGrid columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Primer nombre:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbPersona.persona.primerNombre}" required="true" requiredMessage="Digite el primer nombre" maxlength="15">
+                                        <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo nombre:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbPersona.persona.segundoNombre}" required="true" requiredMessage="Digite el segundo nombre" maxlength="15">
+                                        <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Primer apellido:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbPersona.persona.primerApellido}" required="true" requiredMessage="Digite el primer apellido" maxlength="15">
+                                            <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo apellido:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputText value="#{MbPersona.persona.segundoApellido}" required="true" requiredMessage="Digite el segundo apellido" maxlength="15">
+                                            <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha de nacimiento:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:calendar maxdate="today" locale="es" navigator="true" value="#{MbPersona.persona.fechaNacimiento}" label="Fecha de nacimiento" pattern="dd-MM-yyyy" mask="true" required="true" requiredMessage="Fecha invalida"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="DUI:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputMask id="persona_dui" value="#{MbPersona.persona.dui}" mask="99999999-9" required="true" requiredMessage="DUI invalido">
+                                        <p:ajax event="blur" listener="#{MbPersona.validarPersonaDui()}" update="mensaje"/>
+                                    </p:inputMask>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="NIT:" />
+                                    <p:spacer height="10" width="10" />
+                                    <p:inputMask id="persona_nit" value="#{MbPersona.persona.nit}" mask="9999-999999-999-9" required="true" requiredMessage="NIT invalido">
+                                        <p:ajax event="blur" listener="#{MbPersona.validarPersonaNit()}" update="mensaje"/>
+                                    </p:inputMask>
+                                </p:column>
+                                <p:column >
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="domicilio" title="Domicilio">
+                    <p:panel>
+                        <p:growl/>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:selectOneMenu id="coddepartamento" value="#{MbPersona.codigodepartamento}" required="true" requiredMessage="Seleccione el departamento">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbPersona.items_departamento}" />
+                                    <p:ajax update="coddepartamentotxt codmunicipio codmunicipiotxt" event="change" listener="#{MbPersona.resetCodigoMunicipio()}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel value="Codigo departamento:" />
+                                <p:inputMask  id="coddepartamentotxt" value="#{MbPersona.codigodepartamento}" mask="99">
+                                    <p:ajax event="keyup" update="coddepartamento codmunicipio codmunicipiotxt" delay="500" listener="#{MbPersona.resetCodigoMunicipio()}"/>
+                                </p:inputMask>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:selectOneMenu id="codmunicipio" value="#{MbPersona.codigomunicipio}" required="true" requiredMessage="Seleccione el municipio">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{MbPersona.items_municipio}"/>
+                                    <p:ajax update="codmunicipiotxt" event="change" listener="#{MbPersona.asignarMunicipio()}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel value="Codigo municipio:" />
+                                <p:inputMask  id="codmunicipiotxt" value="#{MbPersona.codigomunicipio}" mask="999">
+                                    <p:ajax event="keyup" update="codmunicipio" delay="500" listener="#{MbPersona.asignarMunicipio()}"/>
+                                </p:inputMask>
+                            </p:column>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Domicilio:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:inputTextarea maxlength="1000" value="#{MbPersona.persona.direccionResidencia}" style="width: 450px" required="true" requiredMessage="Digite el domicilio" >
+                                    <p:keyFilter regEx="/[a-z0-9\.\#\,\:\; ]/i" />
+                                </p:inputTextarea>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="contacto" title="Contacto">
+                    <p:panel>
+                        <p:growl/>
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Email:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:inputText maxlength="75" id="persona_email"  validatorMessage="Email invalido" value="#{MbPersona.persona.correoPersona}" required="true" requiredMessage="Digite el email">
+                                    <p:keyFilter regEx="/[a-z0-9_\.\-@]/i" />
+                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                    <p:ajax event="blur" listener="#{MbPersona.validarPersonaEmail()}" update="mensaje"/>
+                                </p:inputText>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Telefono:" />
+                                <p:spacer height="10" width="10" />
+                                <p:inputMask value="#{MbPersona.persona.telefonoPersona}" mask="9999-9999" required="true" requiredMessage="Digite el telefono"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel header="Datos personales">
+                        <h:panelGrid columns="4" cellpadding="10">
+                                <p:column >
+                                    <h:outputText value="Primer nombre:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.persona.primerNombre}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo nombre:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.persona.segundoNombre}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Primer apellido:"/>
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.persona.primerApellido}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Segundo apellido:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.persona.segundoApellido}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="Fecha de nacimiento:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.persona.fechaNacimiento}" style="font-weight: bold;">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="DUI:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.persona.dui}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                    <h:outputText value="NIT:" />
+                                    <p:spacer height="10" width="10" />
+                                    <h:outputText value="#{MbPersona.persona.nit}" style="font-weight: bold;"/>
+                                </p:column>
+                                <p:column >
+                                </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Domicilio">
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.municipio.departamento.nomDepto}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.codigodepartamento}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.municipio.nomMunicipio}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.codigomunicipio}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Domicilio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.persona.direccionResidencia}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel> 
+                    <p:panel header="Contacto">
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Email:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.persona.correoPersona}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Telefono:" />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbPersona.persona.telefonoPersona}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>    
+                        
+                    <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('personal',false)" actionListener="#{MbPersona.registrar()}" style="float: right;" class="secondary-btn" update="mensaje" value="Registrar" ajax="true" icon="ui-icon-plus" />    
+                    <br/><br/>
+                </p:tab>
+            </p:wizard>
+            <p:blockUI block="F01"  widgetVar="bui">
+                Procesando...
+            </p:blockUI>
+        </h:form>
+    </ui:define>
+</ui:composition>

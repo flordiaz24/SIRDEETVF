@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.BitacoraCampo" table="bitacora_campo" schema="public" optimistic-lock="version">
+        <id name="idBitCampo" type="int">
+            <column name="id_bit_campo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="bitacoraCampo" class="sv.ues.dominio.BitacoraCampo" fetch="select">
+            <column name="bit_id_bit_campo" />
+        </many-to-one>
+        <many-to-one name="invVector" class="sv.ues.dominio.InvVector" fetch="select">
+            <column name="id_inv_vector" not-null="true" />
+        </many-to-one>
+        <property name="fechaCampo" type="date">
+            <column name="fecha_campo" length="13" not-null="true" />
+        </property>
+        <property name="codigoBitacora" type="string">
+            <column name="codigo_bitacora" length="15" not-null="true" />
+        </property>
+        <property name="descripcionBitacora" type="string">
+            <column name="descripcion_bitacora" length="100" not-null="true" />
+        </property>
+        <set name="bitacoraCampos" table="bitacora_campo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="bit_id_bit_campo" />
+            </key>
+            <one-to-many class="sv.ues.dominio.BitacoraCampo" />
+        </set>
+        <set name="encuestas" table="encuesta" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_bit_campo" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Encuesta" />
+        </set>
+        <list name="muestras" table="muestra" inverse="true"   cascade="all" lazy="true" fetch="select">
+            <key column="id_bit_campo" >
+               
+            </key>
+            <list-index column="secuencia" base="1"/>  
+            <one-to-many class="sv.ues.dominio.Muestra" />
+        </list>
+          
+        <set name="ubicacions" table="ubicacion" inverse="true" cascade="all" lazy="true" fetch="select">
+            <key>
+                <column name="id_bit_campo" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Ubicacion" />
+        </set>
+    </class>
+</hibernate-mapping>

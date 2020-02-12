@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestion roles</ui:define>
+
+    <ui:define name="content">
+<!-- INICIO FORMULARIO REGISTRAR ROL -->
+        <h:form id="creacion">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:panel header="Roles">
+                <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                            <p:outputLabel value="Fecha de colecta:" />
+                            <p:calendar style="width: 33%" showOn="button" value="#{MbBitLabChinche.blcregistro.fechaColecta}" pattern="dd/MM/yyyy" mask="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                            <p:outputLabel value="Fecha de ingreso a laboratorio:" />
+                            <p:calendar style="width: 33%" showOn="button" value="#{MbBitLabChinche.blcregistro.fechaIngreso}" pattern="dd/MM/yyyy" mask="true"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                            <p:outputLabel value="Fecha de trabajo:" />
+                            <p:calendar style="width: 33%" showOn="button" value="#{MbBitLabChinche.blcregistro.fechaTrabajo}" pattern="dd/MM/yyyy" mask="true"/>
+                        </h:panelGrid>
+                </h:panelGrid>
+                
+                <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                        <h:outputLabel id="lbl_departamento_domicilio" value="Departamento" class="label" style="margin-bottom: 0px;"/>
+                        <p:selectOneMenu id="coddepartamentodd" value="#{MbBitLabChinche.codigodepartamento}">
+                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{MbBitLabChinche.items_departamento}" />
+                            <p:ajax update="coddepartamentotxt"/>
+                            <p:ajax update="som_municipio"/>
+                            <p:ajax update="codmunicipiotxt"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Codigo departamento:" />
+                        <p:inputText id="coddepartamentotxt" style="width: 33%" value="#{MbBitLabChinche.codigodepartamento}">
+                            <p:ajax event="keyup" update="coddepartamentodd"/>
+                            <p:ajax update="som_municipio"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                        <h:outputLabel id="lbl_municipio_domicilio" value="Municipio" class="label" style="margin-bottom: 0px;"/>
+                        <p:selectOneMenu  id="som_municipio" value="#{mbBitacoraCampo.codigomunicipio}">
+                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{MbBitLabChinche.items_municipio}" />
+                            <p:ajax update="codmunicipiotxt"/>
+                        </p:selectOneMenu>
+                       
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                    <p:outputLabel value="Nombre cientifico" />
+                    <p:inputText value="#{MbBitLabChinche.blcregistro.nombreCientifico}"/><br/>
+                    <p:outputLabel value="N Casa" />
+                    <p:inputText value="#{MbBitLabChinche.blcregistro.numeroCasa}"/><br/>
+                    <p:outputLabel value="Nombre jefe de familia:" />
+                    <p:inputText value="#{MbBitLabChinche.blcregistro.nombreJefeFamilia}"/><br/>
+                </h:panelGrid>
+                <br/><br/>
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:selectOneRadio value="#{MbBitLabChinche.tipo}" id="console" unselectable="true">
+                        <f:selectItem itemLabel="Domiciliar" itemValue="Domiciliar" />
+                        <f:selectItem itemLabel="Peridomiciliar" itemValue="Peridomiciliar" />
+                        <f:selectItem itemLabel="Silvestre" itemValue="Silvestre" />
+                    </p:selectOneRadio>
+                </h:panelGrid>
+                <br/><br/>
+                <p:commandButton class="secondary-btn" update="mensaje" value="Registrar" actionListener="#{MbBitLabChinche.registrar()}" ajax="true" icon="ui-icon-plus" />
+                <br/>
+            </p:panel>
+        </h:form>
+<!-- FIN FORMULARIO REGISTRAR ROL -->
+        <br/>
+        <br/>
+
+<!-- INICIO DIALOGO DEFAULT -->
+    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+        Procesando...
+    </p:dialog>
+<!-- FIN DIALOGO DEFAULT -->
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+    </ui:define>
+</ui:composition>

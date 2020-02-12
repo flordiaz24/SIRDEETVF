@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Regitrar cargo</ui:define>
+
+
+    <ui:define name="content">
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+            <p:panel header="Registrar cargo"/>
+            <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbCargo.flujoResgistrar}">
+                <p:tab id="general" title="General">
+                    <p:growl id="mensaje_personal" showDetail="true" showSummary="false" sticky="false" life="3000"/>
+                    <p:panel>
+                        <h:panelGrid columns="2"  cellpadding="10">
+                            <p:column>
+                                <h:outputText value="Nombre del cargo:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:inputText value="#{MbCargo.cargo.cargo}" required="true" requiredMessage="Digite el nombre del cargo" maxlength="25" validatorMessage="El nombre debe contener al menos 5 caracteres">
+                                    <f:validateLength minimum="5" />
+                                    <p:keyFilter regEx="/[a-zA-Z ]/i " />
+                                </p:inputText>
+                            </p:column>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column >
+                                <h:outputText value="Descripcion:"/>
+                                <p:spacer height="10" width="10" />
+                                <p:inputTextarea maxlength="200" value="#{MbCargo.cargo.descripcion}" cols="50" style="width: 450px" required="true" requiredMessage="Digite la descripcion" validatorMessage="La descripcion debe contener al menos 5 caracteres">
+                                    <f:validateLength minimum="5" />
+                                    <p:keyFilter regEx="/[a-zA-Z ]/i"/>
+                                </p:inputTextarea>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:column>
+                                <h:outputText value="Nombre Cargo:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbCargo.cargo.cargo}"   style="font-weight: bold;"/>    
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Descripcion del cargo:" />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{MbCargo.cargo.descripcion}" styleClass="capitalized"  style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                        <br/>
+                    </p:panel>
+                    <p:commandButton style="float: right;" onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('general',false)" id="btnSave" actionListener="#{MbCargo.registrar()}" class="secondary-btn" update="mensaje" value="Registrar" ajax="true" icon="ui-icon-plus" /> 
+                </p:tab>    
+            </p:wizard>
+            
+           
+            <p:blockUI block="F01" trigger="btnSave"  widgetVar="bui">
+                Procesando...
+            </p:blockUI>   
+        </h:form>
+        <!-- FIN FORMULARIO REGISTRAR cargo-->
+        <br/>
+        <br/>
+
+
+
+    </ui:define>
+</ui:composition>

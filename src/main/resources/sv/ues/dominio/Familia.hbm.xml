@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 12, 2019 11:36:40 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Familia" table="familia" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="orden" class="sv.ues.dominio.Orden" fetch="select">
+            <column name="id_orden" not-null="true" />
+        </many-to-one>
+        <property name="nombreFamilia" type="string">
+            <column name="nombre_familia" length="50" not-null="true" />
+        </property>
+        <set name="vectors" table="vector" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_familia" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Vector" />
+        </set>
+    </class>
+</hibernate-mapping>

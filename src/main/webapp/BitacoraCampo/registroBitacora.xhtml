@@ -1,0 +1,246 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Bitacora de campo</ui:define>
+
+    <ui:define name="content">
+        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+            <h2>Bitacora de campo</h2>
+
+        </p:panelGrid>
+
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+
+
+            <p:wizard widgetVar="wiz" flowListener="#{mbBitacoraCampo.flujoResgistrar}">
+                <p:tab id="principal" title="Datos generales">
+                    <p:panel>
+                        <div class="ui-fluid">
+                            <h2>Datos de la bitacora</h2>     
+                            <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"  layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+                                <p:outputLabel value="Codigo de la bitacora" for="codBit"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="codBit" value="#{mbBitacoraCampo.bitacoraCampo.codigoBitacora}" required="true" requiredMessage="Ingrese codigo" />
+                                    <label>Codigo de bitacora</label>
+                                </h:panelGroup>    
+
+                                <p:outputLabel for="descripcion" value="Descripcion de la bitacora"/>
+                                <p:inputTextarea id="descripcion" value="#{mbBitacoraCampo.bitacoraCampo.descripcionBitacora}" required="true" requiredMessage="Digite descripcion"/>
+                                <p:outputLabel for="inv" value="Inv Vector "/>
+                                <p:selectOneMenu id="inv" value="#{mbBitacoraCampo.bitacoraCampo.invVector}" required="true" requiredMessage="Seleccione tipo muestra" >
+
+                                    <f:selectItem itemLabel="Seleccion inv vector" itemValue="#{null}" />
+                                    <f:selectItems value="#{mbBitacoraCampo.lsInvVector}"
+                                                   var="invVector"
+                                                   itemValue="#{invVector}"
+                                                   itemLabel="#{invVector.tituloInv}"/>
+                                    <f:converter binding="#{converterInvVector}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel for="fechaC" value="Fecha de investigacion de campo"/>
+                                <p:calendar id="fechaC" value="#{mbBitacoraCampo.bitacoraCampo.fechaCampo}" pattern="dd/MM/yyyy" required="true" mask="true" requiredMessage="Fecha de campo requerida"/>
+
+
+                            </p:panelGrid>     
+                        </div>
+                        <h2>Datos de ubicacion</h2>
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"  layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+                                <p:outputLabel for="poblacion" value="Poblacion beneficiada"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="poblacion" value="#{mbBitacoraCampo.ubicacion.poblacion}"/>
+                                    <label>Latitud</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="latitud" value="Latitud"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="latitud" value="#{mbBitacoraCampo.ubicacion.latitud}"/>
+                                    <label>Latitud</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="longitud" value="Longitud"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="longitud" value="#{mbBitacoraCampo.ubicacion.longitud}"/>
+                                    <label>Latitud</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="altitud" value="Altitud"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="altitud" value="#{mbBitacoraCampo.ubicacion.altitud}"/>
+                                    <label>Latitud</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="Departamento:" for="coddepartamento"/>
+                                <p:selectOneMenu id="coddepartamento" value="#{mbBitacoraCampo.codigodepartamento}" required="true" requiredMessage="Seleccione el departamento">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{mbBitacoraCampo.items_departamento}" />
+                                    <p:ajax update="coddepartamentotxt codmunicipio codmunicipiotxt codcolonia codcoloniatxt" event="change" listener="#{mbBitacoraCampo.resetCodigoMunicipio()}"/>
+                                </p:selectOneMenu>
+
+
+                                <p:outputLabel value="Codigo departamento:" for="coddepartamentotxt" />
+                                <p:inputMask  id="coddepartamentotxt" value="#{mbBitacoraCampo.codigodepartamento}" mask="99" required="true" requiredMessage="Digite el codigo de departamento">
+                                    <p:ajax event="blur" update="coddepartamento codmunicipio codmunicipiotxt codcolonia codcoloniatxt" listener="#{mbBitacoraCampo.resetCodigoMunicipio()}"/>
+                                </p:inputMask>
+
+                                <p:outputLabel value="Municipio:" for="codmunicipio"/>
+                                <p:selectOneMenu id="codmunicipio" value="#{mbBitacoraCampo.codigomunicipio}" required="true" requiredMessage="Seleccione el municipio">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{mbBitacoraCampo.items_municipio}"/>
+                                    <p:ajax update="codmunicipiotxt codcolonia codcoloniatxt" event="change" listener="#{mbBitacoraCampo.asignarMunicipio()}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="codmunicipiotxt" value="Codigo municipio:" />
+                                <p:inputMask  id="codmunicipiotxt" value="#{mbBitacoraCampo.codigomunicipio}" mask="999" required="true" requiredMessage="Digite el codigo de municipio">
+                                    <p:ajax event="blur" update="codmunicipio codcolonia codcoloniatxt" listener="#{mbBitacoraCampo.asignarMunicipio()}"/>
+                                </p:inputMask>
+
+                                <p:outputLabel value="Colonia:" for="codcolonia"/>
+                                <p:selectOneMenu id="codcolonia" value="#{mbBitacoraCampo.codigocolonia}" required="true" requiredMessage="Seleccione colonia">
+                                    <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{mbBitacoraCampo.items_colonia}"/>
+                                    <p:ajax update="codcoloniatxt" event="change" listener="#{mbBitacoraCampo.asignarColoniaCanton()}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="codcoloniatxt" value="Codigo colonia:" />
+                                <p:inputMask  id="codcoloniatxt" value="#{mbBitacoraCampo.codigocolonia}" mask="999" required="true" requiredMessage="Digite el codigo de colonia">
+                                    <p:ajax event="blur" update="codcolonia" listener="#{mbBitacoraCampo.asignarColoniaCanton()}"/>
+                                </p:inputMask>
+
+                                
+
+
+                            </p:panelGrid>
+                        </div>
+                    </p:panel>
+                </p:tab>
+
+                <p:tab id="muestra" title="Muestras recolectadas">
+                    <p:panel >
+                        <h:panelGrid columns="4" cellpadding="10" title="Datos de muestras">
+                            <p:outputLabel value="Codigo de la muestra"/>
+                            <p:inputText value="#{mbBitacoraCampo.muestra.codigoMuestra}" disabled="true" />
+                            <p:outputLabel value="Edad "/>
+                            <p:inputNumber value="#{mbBitacoraCampo.muestra.edadMuestra}" decimalPlaces="0"/>
+                            <p:outputLabel for="fechaB" value="Fecha de colecta "/>
+                            <p:calendar id="fechaB" value="#{mbBitacoraCampo.muestra.fechaMuestra}" pattern="dd/MM/yyyy" mask="true"/>
+                            <p:outputLabel for="genero" value="Sexo:" />
+                            <p:selectOneMenu id="genero" value="#{mbBitacoraCampo.muestra.generoMuestra}" style="width:125px">
+                                <f:selectItem itemLabel="Seleccione uno" itemValue="" />
+                                <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                <f:selectItem itemLabel="Femenino" itemValue="F" />
+
+                            </p:selectOneMenu>    
+                            <p:outputLabel value="Telefono :"/>
+                            <p:inputMask value="#{mbBitacoraCampo.muestra.telefonoMuestra}" mask="9999-9999"  />
+                            <p:outputLabel value="Nombre jefe de familia"/>
+                            <p:inputText value="#{mbBitacoraCampo.muestra.nomJefeFam}" />
+                            <p:outputLabel value="Numero de muestras recolectadas"/>
+                            <p:inputText value="#{mbBitacoraCampo.muestra.numeroMuestra}" />
+                            <p:outputLabel value="Tipo de muestra"/>
+                            <p:selectOneMenu id="labx" value="#{mbBitacoraCampo.muestra.tipoMuestra}" required="true" requiredMessage="Seleccione tipo muestra" >
+
+                                <f:selectItem itemLabel="--Seleccione investigacion--" itemValue="#{null}" />
+                                <f:selectItems value="#{mbBitacoraCampo.lsTipoMuestras}"
+                                               var="tipoMuestra"
+                                               itemValue="#{tipoMuestra}"
+                                               itemLabel="#{tipoMuestra.nomMuestra}"/>
+                                <f:converter binding="#{converterTipoMuestra}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Motivo de muestra"/>
+                            <p:inputTextarea rows="3" value="#{mbBitacoraCampo.muestra.motivoMuestra}"/>
+                            <p:commandButton  value="agregar" action="#{mbBitacoraCampo.agregarMuestra()}" update="listMuestra @parent" >
+                                <p:collector value="#{mbBitacoraCampo.muestra}" addTo="#{mbBitacoraCampo.lsMuestras}" unique="true"/> 
+                            </p:commandButton>    
+                        </h:panelGrid>
+                        <p:outputPanel id="listMuestra">
+                            <p:dataTable value="#{mbBitacoraCampo.lsMuestras}" var="muestra" id="tablaMuestra">
+                                <p:column headerText="Codigo de muestra">
+                                    <p:outputLabel value="#{muestra.codigoMuestra}"/>
+                                </p:column>
+                                <p:column headerText="Edad muestra">
+                                    <p:outputLabel value="#{muestra.edadMuestra}"/>
+                                </p:column>
+                                <p:column headerText="Fecha muestra">
+                                    <p:outputLabel value="#{muestra.fechaMuestra}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </p:outputLabel>    
+                                </p:column>
+                                <p:column headerText="Codigo de muestra">
+                                    <p:outputLabel value="#{muestra.codigoMuestra}"/>
+                                </p:column>
+                                <p:column headerText="Secuencia">
+                                    <p:outputLabel value="#{muestra.secuencia}"/>
+                                </p:column>
+                                <p:column headerText="Acción">
+                                    <p:commandLink value="Eliminar" update=":F01:listMuestra" process=":F01:listMuestra">
+                                        <p:collector value="#{muestra}" removeFrom="#{mbBitacoraCampo.lsMuestras}" unique="true"/>
+                                    </p:commandLink>
+                                </p:column>
+
+                            </p:dataTable>    
+                        </p:outputPanel>
+                    </p:panel>
+
+
+
+                </p:tab>
+                <p:tab id="confirmar" title="Confirmar Datos">
+                    <p:panel header="Datos personales"> 
+                        <h:panelGrid columns="2" >
+                            <p:outputLabel value="Codigo de la bitacora"/>
+                            <p:outputLabel value="#{mbBitacoraCampo.bitacoraCampo.codigoBitacora}" />
+                            <p:outputLabel value="Descripcion de la bitacora"/>
+                            <p:outputLabel value="#{mbBitacoraCampo.bitacoraCampo.descripcionBitacora}"/>
+
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Muestras recolectadas"> 
+                        <h:panelGrid columns="1" >
+                            <p:dataTable value="#{mbBitacoraCampo.lsMuestras}" var="muestra" id="tablaMuestras">
+                                <p:column headerText="Codigo de muestra">
+                                    <p:outputLabel value="#{muestra.codigoMuestra}"/>
+                                </p:column>
+                                <p:column headerText="Edad muestra">
+                                    <p:outputLabel value="#{muestra.edadMuestra}"/>
+                                </p:column>
+                                <p:column headerText="Fecha muestra">
+                                    <p:outputLabel value="#{muestra.fechaMuestra}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </p:outputLabel>    
+                                </p:column>
+                                <p:column headerText="Codigo de muestra">
+                                    <p:outputLabel value="#{muestra.codigoMuestra}"/>
+                                </p:column>
+                            </p:dataTable>    
+
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('principal',false)" 
+                                     actionListener="#{mbBitacoraCampo.registrar()}" style="float: right;" class="secondary-btn"  value="Registrar" ajax="true" icon="ui-icon-plus" />    
+                </p:tab>
+            </p:wizard>
+
+
+
+
+
+            <!--<p:panel header="Persona">
+                
+                <p:commandButton class="secondary-btn" update="mensaje" value="Registrar" actionListener="#{MbPersona.registrar()}" ajax="true" icon="ui-icon-plus" />
+                <br/>
+            </p:panel>-->
+        </h:form>
+
+        <!-- INICIO DIALOGO DEFAULT -->
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            Procesando...
+        </p:dialog>
+        <!-- FIN DIALOGO DEFAULT -->
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+    </ui:define>
+</ui:composition>

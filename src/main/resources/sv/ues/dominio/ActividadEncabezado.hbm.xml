@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 01-24-2020 08:44:23 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.ActividadEncabezado" table="actividad_encabezado" schema="public" optimistic-lock="version">
+        <id name="idEncabezado" type="int">
+            <column name="id_encabezado" />
+            <generator class="identity" />
+        </id>
+        <property name="hash" type="string">
+            <column name="hash" />
+        </property>
+        <property name="buena" type="java.lang.Boolean">
+            <column name="buena" />
+        </property>
+        <property name="centinela" type="java.lang.Boolean">
+            <column name="centinela" />
+        </property>
+        <property name="cepa" type="string">
+            <column name="cepa" />
+        </property>
+        <property name="concentracionDeDosis" type="string">
+            <column name="concentracion_de_dosis" />
+        </property>
+        <property name="control" type="java.lang.Boolean">
+            <column name="control" />
+        </property>
+        <property name="control1" type="string">
+            <column name="control_1" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" />
+        </property>
+        <property name="edad" type="string">
+            <column name="edad" />
+        </property>
+        <property name="edadInicial" type="string">
+            <column name="edad_inicial" />
+        </property>
+        <property name="especie" type="string">
+            <column name="especie" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" />
+        </property>
+        <property name="fechaDeNecropcia" type="date">
+            <column name="fecha_de_necropcia" length="13" />
+        </property>
+        <property name="fechaFinal" type="date">
+            <column name="fecha_final" length="13" />
+        </property>
+        <property name="fechaInicio" type="date">
+            <column name="fecha_inicio" length="13" />
+        </property>
+        <property name="grupo" type="string">
+            <column name="grupo" />
+        </property>
+        <property name="lapsoDeTiempo" type="string">
+            <column name="lapso_de_tiempo" />
+        </property>
+        <property name="mala" type="java.lang.Boolean">
+            <column name="mala" />
+        </property>
+        <property name="metodoEutanasico" type="string">
+            <column name="metodo_eutanasico" />
+        </property>
+        <property name="NDelLosAnimales" type="string">
+            <column name="n_del_los_animales" />
+        </property>
+        <property name="NJaula" type="string">
+            <column name="n_jaula" />
+        </property>
+        <property name="no" type="java.lang.Boolean">
+            <column name="no" />
+        </property>
+        <property name="noProgramada" type="java.lang.Boolean">
+            <column name="no_programada" />
+        </property>
+        <property name="observacionesEnc" type="string">
+            <column name="observaciones_enc" />
+        </property>
+        <property name="observacionesPie" type="string">
+            <column name="observaciones_pie" />
+        </property>
+        <property name="patron" type="java.lang.Boolean">
+            <column name="patron" />
+        </property>
+        <property name="patron2" type="string">
+            <column name="patron_2" />
+        </property>
+        <property name="periodo" type="string">
+            <column name="periodo" />
+        </property>
+        <property name="peso" type="string">
+            <column name="peso" />
+        </property>
+        <property name="programada" type="java.lang.Boolean">
+            <column name="programada" />
+        </property>
+        <property name="protocolo" type="string">
+            <column name="protocolo" />
+        </property>
+        <property name="regular" type="java.lang.Boolean">
+            <column name="regular" />
+        </property>
+        <property name="responsableDePrueba" type="string">
+            <column name="responsable_de_prueba" />
+        </property>
+        <property name="semanaN" type="string">
+            <column name="semana_n" />
+        </property>
+        <property name="sexo" type="string">
+            <column name="sexo" />
+        </property>
+        <property name="si" type="java.lang.Boolean">
+            <column name="si" />
+        </property>
+        <property name="sustanciaDeEnsayo" type="string">
+            <column name="sustancia_de_ensayo" />
+        </property>
+        <property name="tiempoDeExposicion" type="string">
+            <column name="tiempo_de_exposicion" />
+        </property>
+        <property name="tiempoDeObservacion" type="string">
+            <column name="tiempo_de_observacion" />
+        </property>
+        <property name="tratamiento" type="java.lang.Boolean">
+            <column name="tratamiento" />
+        </property>
+        <property name="tratamiento3" type="string">
+            <column name="tratamiento_3" />
+        </property>
+        <property name="tratamiento4" type="string">
+            <column name="tratamiento_4" />
+        </property>
+        <property name="tratamiento5" type="string">
+            <column name="tratamiento_5" />
+        </property>
+        <property name="tratamiento6" type="string">
+            <column name="tratamiento_6" />
+        </property>
+        <property name="viaDeAdministracion" type="string">
+            <column name="via_de_administracion" />
+        </property>
+        
+        
+        <property name="nombreInvestigacion" type="string">
+            <column name="nombreinvestigacion" />
+        </property>
+        <property name="codigoInvestigacion" type="string">
+            <column name="codigoinvestigacion" />
+        </property>
+        <property name="usuario" type="string">
+            <column name="usuario" />
+        </property>
+        
+        <property name="fechaRegistro" type="date">
+            <column name="fecha_registro" length="13" />
+        </property>
+        <set name="actividad01s" table="actividad_01" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="id_encabezado" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Actividad01" />
+        </set>
+    </class>
+</hibernate-mapping>

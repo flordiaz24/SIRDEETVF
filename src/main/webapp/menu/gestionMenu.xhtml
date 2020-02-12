@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestion Pantalla</ui:define>
+
+    <ui:define name="content">
+<!-- INICIO FORMULARIO ROLES REGISTRADOS -->
+        <h:form id="registros">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:dataTable widgetVar="tabla" value="#{MbMenu.lista_rol()}" id="x" var="rol" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                <f:facet name="header">
+                    Pantallas registradas
+                </f:facet>
+                <p:column headerText="Nombre" filterBy="#{rol.nomMenu}" filterMatchMode="contains">
+                    <h:outputText value="#{rol.nomMenu}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <div align="center">
+                        <p:commandButton value="Editar" class="orange-btn" actionListener="#{MbMenu.modificar(rol)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod" />
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+<!-- FIN FORMULARIO ROLES REGISTRADOS -->
+
+
+<!-- INICIO FORMULARIO MODIFICAR ROL -->
+        <h:form id="formulario_modificar">
+            <p:dialog header="Modificar" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true">
+                <p:panel style="height: 200px;width: 500px;border: none !important;" rendered="#{not empty MbMenu.selectedRol}" id="panel_modificar">
+                    
+                    <p:wizard widgetVar="wiz" id="registro" flowListener="#{MbMenu.flujoModificar}">
+                    <p:tab id="general" title="Datos generales">
+                        <p:growl id="mensaje_modificar" showDetail="true" showSummary="false" sticky="false" life="3000" />
+                        <p:panel>
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:outputLabel value="Nombre rol" />
+                                <p:inputTextarea value="#{MbMenu.selectedRol.nomMenu}" cols="50" rows="1" maxlength="25">
+                                    <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                </p:inputTextarea>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="confirmar" title="Confirmar">
+                        <p:panel>
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:outputLabel value="Nombre rol:" />
+                                <h:outputText value="#{MbMenu.selectedRol.nomMenu}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <p:commandButton style="float: right;" class="orange-btn" oncomplete="PF('wiz').loadStep('general',false)" actionListener="#{MbMenu.modificarDialog()}" ajax="true" value="Modificar" update="registros:mensaje"/>
+                        <br/><br/>
+                        </p:panel>
+                    </p:tab>
+                    </p:wizard>
+                    <!--<div align="center">
+                        <p>
+                            <p:commandButton class="secondary-btn" onclick="PF('dialogoModificar').hide();" ajax="true" value="Cancelar" />
+                        </p>
+                    </div>-->
+                </p:panel>
+            </p:dialog>
+        </h:form>
+
+<!-- INICIO DIALOGO DEFAULT -->
+    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+        Procesando...
+    </p:dialog> 
+<!-- FIN DIALOGO DEFAULT -->
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+    </ui:define>
+</ui:composition>

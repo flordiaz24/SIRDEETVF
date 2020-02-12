@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Registrar Rol</ui:define>
+
+    <ui:define name="content">
+<!-- INICIO FORMULARIO REGISTRAR ROL -->
+        <h:form id="F01">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000">
+                <p:autoUpdate />
+            </p:growl>
+            <p:panel header="Registrar rol"/>
+                <p:wizard widgetVar="wiz" id="registro">
+                    <p:tab id="general" title="Datos generales">
+                        <p:panel>
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:outputLabel value="Nombre rol" />
+                                <p:inputTextarea id="nombre" value="#{MbRol.roles.nomRol}" cols="50" rows="1" maxlength="25" required="true" requiredMessage="Debe digitar el nombre" validatorMessage="El nombre debe contener al menos 10 caracteres">
+                                    <f:validateLength minimum="10"/>
+                                    <p:keyFilter regEx="/[a-zA-Z ]/i" />
+                                </p:inputTextarea>
+                                <p:outputLabel value="Descripcion" />
+                                <p:inputTextarea value="#{MbRol.roles.descripcion}" maxlength="500" cols="50" autoResize="true" required="true" requiredMessage="Debe digitar la descripcion" validatorMessage="La descripcion debe contener al menos 25 caracteres">
+                                    <f:validateLength minimum="25"  />
+                                    <p:keyFilter regEx="/[a-zA-Z0-9 ]/i" />
+                                </p:inputTextarea>
+                                <p:outputLabel value="Estado" />
+                                <p:selectOneMenu value="#{MbRol.roles.estadoRol}">
+                                    <f:selectItem itemLabel="Activo" itemValue="true"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="false" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="confirmar" title="Confirmar">
+                        <p:panel>
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:outputLabel value="Nombre rol:" />
+                                <h:outputText value="#{MbRol.roles.nomRol}" style="font-weight: bold;"/>
+                                <p:outputLabel value="Descripcion:" />
+                                <h:outputText value="#{MbRol.roles.descripcion}" style="font-weight: bold;"/>
+                                <p:outputLabel value="Estado:" />
+                                <h:outputText value="#{MbRol.roles.estadoRol == false? 'Inactivo' : 'Activo'}" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <br/>
+                            <p:commandButton onclick="PF('bui').show()" oncomplete="PF('wiz').loadStep('general',false)" style="float: right;" class="secondary-btn"  update="mensaje"  value="Registrar rol" actionListener="#{MbRol.registrar()}" ajax="true" icon="ui-icon-plus" />
+                            <br/><br/>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            <p:blockUI block="F01" widgetVar="bui" >
+                Procesando...
+            </p:blockUI>
+        </h:form>
+<!-- FIN FORMULARIO REGISTRAR ROL -->
+    </ui:define>
+</ui:composition>

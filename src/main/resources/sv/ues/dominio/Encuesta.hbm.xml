@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-28-2019 09:05:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sv.ues.dominio.Encuesta" table="encuesta" schema="public" optimistic-lock="version">
+        <id name="idEncuesta" type="int">
+            <column name="id_encuesta" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="bitacoraCampo" class="sv.ues.dominio.BitacoraCampo" fetch="select">
+            <column name="id_bit_campo" not-null="true" />
+        </many-to-one>
+        <property name="nomEncuesta" type="string">
+            <column name="nom_encuesta" length="200" />
+        </property>
+        <set name="preguntas" table="pregunta" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_encuesta" not-null="true" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Pregunta" />
+        </set>
+        <set name="personas" table="persona" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_encuesta" />
+            </key>
+            <one-to-many class="sv.ues.dominio.Persona" />
+        </set>
+    </class>
+</hibernate-mapping>
