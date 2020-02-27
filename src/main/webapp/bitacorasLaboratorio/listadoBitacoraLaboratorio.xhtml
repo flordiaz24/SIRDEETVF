@@ -7,7 +7,7 @@
     <ui:define name="content">
         <h:form id="FormLisBitLab">
             <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
-            <p:panel header="Bitácoras de Laboratorio"/>
+            <p:panel header="BitÃ¡coras de Laboratorio"/>
 
 
             <p:tabView var="vect" value="${mbBitLab.lista_vector()}">
@@ -17,7 +17,7 @@
                     <p:dataTable var="registro" value="${mbBitLab.lista_lab_bit()}" paginator="true" reflow="true" rows="5" >
                         <p:column class="text-center">
                             <f:facet name="header">
-                                <h:outputText value="Código"/>
+                                <h:outputText value="CÃ³digo"/>
                             </f:facet>
                             <h:outputText value="${registro.codBitLab}" />
                         </p:column>

@@ -19,6 +19,7 @@
                         <f:selectItems value="#{MbLote.lista_lote_activos_inactivos(1)}" var="ve" itemValue="#{ve.idLote}" itemLabel="#{ve.nombreLote}" />
                         <p:ajax update="mostrar_mu" event="change" listener="#{mbMuestrasLotes.obtener_cod_fam_vector(mbMuestrasLotes.cod_lote2)}"/>
                         <p:ajax update="nomVector nomCientifico nombreFamilia" event="change" listener="#{MbLote.setLoteSeleccionado(MbLote.lote_por_id(mbMuestrasLotes.cod_lote2))}"/>
+                        <p:ajax event="change" listener="#{mbMuestrasLotes.hacer_base_codigo_muestra()}" />
                     </p:selectOneMenu><br/>
                 </p:panelGrid>
                 <p:panelGrid >
@@ -40,16 +41,16 @@
 
             <p:dataTable  id="mostrar_mu" emptyMessage="No se han encontrado registros" var="mu" value="#{mbMuestrasLotes.muestras_por_lote(mbMuestrasLotes.cod_lote2)}" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                 <p:column headerText="correlativo">
-                    <h:outputText value="#{mu.secuencia}" />
+                    <h:outputText value="#{mbMuestrasLotes.base_codigo_muestra}#{mu.secuencia}" />
                 </p:column>
-                <p:column headerText="Estadio">
+                <p:column headerText="Estadio" filterBy="#{mbMuestrasLotes.estadio_muestra(mu.edadMuestra)}" filterMatchMode="contains" >
                     <h:outputText value="#{mbMuestrasLotes.estadio_muestra(mu.edadMuestra)}" />
                 </p:column>
-                <p:column headerText="Genero">
+                <p:column headerText="Genero" filterBy="#{mu.generoMuestra == 'Hembra'? 'Hembra' : 'Macho'}" filterMatchMode="contains" >
                     <h:outputText value="#{mu.generoMuestra == 'Hembra'? 'Hembra' : 'Macho'}"/>
                 </p:column>
 
-                <p:column headerText="Posee parasito">
+                <p:column headerText="Posee parasito" filterBy="#{mu.parasito == true? 'Si' : 'No'}" filterMatchMode="contains">
                     <h:outputText value="#{mu.parasito == true? 'Si' : 'No'}" />
                 </p:column>
                 <p:column headerText="Acciones">
@@ -72,7 +73,7 @@
                             <p:column >
                                 <h:outputText value="Correlativo:"/>
                                 <p:spacer height="10" width="10" />
-                                <h:outputText value="#{mbMuestrasLotes.muestraSeleccionada.secuencia}" style="font-weight: bold;"/>
+                                <h:outputText value="#{mbMuestrasLotes.base_codigo_muestra}#{mbMuestrasLotes.muestraSeleccionada.secuencia}" style="font-weight: bold;"/>
                             </p:column>
                             <p:column >
                                 <h:outputText value="Estadio:"/>
@@ -163,7 +164,7 @@
 
                                     <h:panelGrid columns="1" cellpadding="2" width="100% !important">
                                         <p:outputLabel value="Correlativo" />
-                                        <p:inputNumber id="nmuestras" minValue="0" decimalPlaces="0" readonly="true"  value="#{mbMuestrasLotes.modMuestra.secuencia}"/>
+                                        <p:inputText id="nmuestras" readonly="true"  value="#{mbMuestrasLotes.base_codigo_muestra}#{mbMuestrasLotes.modMuestra.secuencia}"/>
                                     </h:panelGrid>
            
                                     <h:panelGrid columns="1" cellpadding="2" width="100% !important">
@@ -214,7 +215,7 @@
 
                                     <h:panelGrid columns="1" cellpadding="2" width="100% !important">
                                         <p:outputLabel value="Correlativo" />
-                                        <h:outputText value="#{mbMuestrasLotes.modMuestra.secuencia}" style="font-weight: bold;"/>
+                                        <h:outputText value="#{mbMuestrasLotes.base_codigo_muestra}#{mbMuestrasLotes.modMuestra.secuencia}" style="font-weight: bold;"/>
                                     </h:panelGrid>
                                     
                                     <h:panelGrid columns="1" cellpadding="2" width="100% !important">

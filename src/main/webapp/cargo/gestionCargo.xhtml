@@ -14,13 +14,13 @@
                     <f:facet name="header">
                         Cargos registrados
                     </f:facet>
-                    <p:column headerText="Nombre Cargo">
+                    <p:column headerText="Nombre Cargo" filterBy="#{cargo.cargo}" filterMatchMode="contains">
                         <h:outputText value="#{cargo.cargo}" />
                     </p:column>
-                    <p:column headerText="Descripcion">
+                    <p:column headerText="Descripcion" filterBy="#{cargo.descripcion}" filterMatchMode="contains" >
                         <h:outputText value="#{cargo.descripcion}" />
                     </p:column>
-                    <p:column headerText="Estado">
+                    <p:column headerText="Estado" filterBy="#{cargo.activo == false? 'Inactivo' : 'Activo'}" filterMatchMode="contains">
                         <h:outputText value="#{cargo.activo == false? 'Inactivo' : cargo.activo == true ? 'Activo' : 'Inactivo'}" /> 
                     </p:column>
                     <p:column headerText="Acciones">
@@ -92,7 +92,11 @@
                 </p:panel>
             </p:dialog>
         </h:form>
-
-
+ <!--- INICIO DIALOGO DEFAULT -->
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            Procesando...
+        </p:dialog> 
+        <!-- FIN DIALOGO DEFAULT -->
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
     </ui:define>
 </ui:composition>

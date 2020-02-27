@@ -35,6 +35,7 @@ public class MbInvestigacion implements Serializable {
    private Investigacion investigacionSeleccionada;
 
     private Laboratorio lab;
+    private Date fechaIni=new Date(), fechaFin=new Date();
     
        
     public Laboratorio getLab() {
@@ -58,6 +59,23 @@ public class MbInvestigacion implements Serializable {
     public void setLsInvestigacions(List<Investigacion> lsInvestigacions) {
         this.lsInvestigacions = lsInvestigacions;
     }
+
+    public Date getFechaIni() {
+        return fechaIni;
+    }
+
+    public void setFechaIni(Date fechaIni) {
+        this.fechaIni = fechaIni;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+    
 
     
     
@@ -141,5 +159,25 @@ public class MbInvestigacion implements Serializable {
         }
         
     }
+     /**
+     * Carga lista de investigaciones entre dos fechas dadas.
+     * @throws Exception 
+     */
+     public void buscar_investigaciones_entre_fechas() throws Exception {
+        if (fechaIni.after(fechaFin)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inicio debe menor o igual a la final"));
+        } else {
+            lsInvestigacions.clear();
+            InvestigacionDao invDao = new InvestigacionDao();
+            lsInvestigacions = invDao.obtener_investigaciones_entre_fechas(fechaIni, fechaFin);
+            if (lsInvestigacions.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay inventario de vectores en ese rango de fechas"));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Inventario vectores cargado exitosamente"));
+            }
+
+        }
+    }
+     
 
 }

@@ -37,6 +37,8 @@ public class MbInvVector implements Serializable{
     private List<Vector> lsVector;
     private List<InvVector> lsInvVector;
     private InvVector invVectorSeleccionado;
+    private Date fechaIni=new Date(), fechaFin=new Date();
+    private Date hoy= new Date();
    
     
     public MbInvVector(){
@@ -75,9 +77,33 @@ public class MbInvVector implements Serializable{
     public void setInvVector(InvVector invVector) {
         this.invVector = invVector;
     }
+
+    public Date getFechaIni() {
+        return fechaIni;
+    }
+
+    public void setFechaIni(Date fechaIni) {
+        this.fechaIni = fechaIni;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public Date getHoy() {
+        return hoy;
+    }
+
+    public void setHoy(Date hoy) {
+        this.hoy = hoy;
+    }
     
     
-    
+       
     public void registrarVector() throws ParseException{
         //llamaremos el dao para guardar el vector
         InvVectorDao invVectorDao=new InvVectorDao();
@@ -127,6 +153,25 @@ public class MbInvVector implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"",x.toString())); 
         }
         
+    }
+    /**
+     * Carga lista de inventario de vectores entre dos fechas dadas.
+     * @throws Exception 
+     */
+     public void buscar_inv_vectores_entre_fechas() throws Exception {
+        if (fechaIni.after(fechaFin)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inicio debe menor o igual a la final"));
+        } else {
+            lsInvVector.clear();
+            InvVectorDao ivDao = new InvVectorDao();
+            lsInvVector = ivDao.obtener_inv_vectores_entre_fechas(fechaIni, fechaFin);
+            if (lsInvVector.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay inventario de vectores en ese rango de fechas"));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Inventario vectores cargado exitosamente"));
+            }
+
+        }
     }
     
 }

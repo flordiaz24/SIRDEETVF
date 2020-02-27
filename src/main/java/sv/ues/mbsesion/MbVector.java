@@ -72,9 +72,14 @@ public class MbVector implements Serializable{
     public String muestra_vector_por_ID(Integer id) {
         VectorDao vec_dao = new VectorDao();
         try {
+            if (id != null) {
             Vector x=vec_dao.findByVectorById(id);
             String xz=x.getNomVector();
             return xz;
+            } else {
+                return null;
+            }
+            
         } catch (Exception x) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, x.toString(), x.toString()));
             return null;

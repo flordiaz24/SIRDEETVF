@@ -66,6 +66,7 @@ public class MbMuestrasLotes implements Serializable {
     private List<SelectItem> items_departamento;
     private List<SelectItem> items_colonias = new ArrayList();
     private String codigo_muestra="";
+    private String base_codigo_muestra="";
 
     /**
      * Creates a new instance of MbMuestrasLotes
@@ -99,6 +100,15 @@ public class MbMuestrasLotes implements Serializable {
         return items_municipio;
         }
     }
+
+    public String getBase_codigo_muestra() {
+        return base_codigo_muestra;
+    }
+
+    public void setBase_codigo_muestra(String base_codigo_muestra) {
+        this.base_codigo_muestra = base_codigo_muestra;
+    }
+    
 
     public String getCodigo_muestra() {
         return codigo_muestra;
@@ -705,5 +715,20 @@ if(ubicacionMunicipio.getCodMunicipio()==null){
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, x.toString(), x.toString()));
             return new Lote();
         }
+    }
+    //Hace la base del código compuesto por orden-localización.
+    public void hacer_base_codigo_muestra(){
+        Lote l = lote_por_id(cod_lote2);
+        obtener_cod_fam_vector(cod_lote2);
+        obtener_familia();
+        Orden o = obtener_orden();
+        asignarUbicacionMuestra_desde_colca(l.getColoniaCanton().getIdColCan());
+        String orden="";
+        if(o.getId()<10){
+            orden = "0"+o.getId();
+        }else{
+            orden += o.getId();
+        }        
+        base_codigo_muestra=""+orden+"-"+ubicacionDepto.getCodDepto()+"-"+ubicacionMunicipio.getCodMunicipio()+"-"+ubicacionColonia.getIdColCan()+"-";
     }
 }

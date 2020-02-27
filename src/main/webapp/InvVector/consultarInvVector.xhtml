@@ -10,20 +10,30 @@
         <h:form id="F01">
             <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
             <p:panel>
+                <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                             layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+                    <p:outputLabel for="calendar" value="Fecha inicial"/>
+                    <p:calendar pattern="dd/MM/yyyy" id="calendar" value="#{mbInvVector.fechaIni}" maxdate="#{mbInvVector.hoy}" required="true" requiredMessage="Ingrese fecha inicial"/>
+
+                    <p:outputLabel for="calendar2" value="Fecha final"/>
+                    <p:calendar pattern="dd/MM/yyyy" id="calendar2" value="#{mbInvVector.fechaFin}" maxdate="#{mbInvVector.hoy}" required="true" requiredMessage="Ingrese fecha final" />
+                    <p:commandButton id="cargar" value="Buscar" icon="ui-icon-search"  actionListener="#{mbInvVector.buscar_inv_vectores_entre_fechas()}" update="@form"/>
+                </p:panelGrid>
                 <p:dataTable value="#{mbInvVector.lsInvVector}" id="x" var="inv" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     <f:facet name="header">
                         Investigación de vector
                     </f:facet>
-                    <p:column headerText="Vector de estudio">
+                    <p:column headerText="Vector de estudio" filterBy="#{inv.vector.nomVector}" filterMatchMode="contains">
                         <h:outputText value="#{inv.vector.nomVector}" />
                     </p:column>
-                    <p:column headerText="Investigación asociada">
+                    <p:column headerText="Investigación asociada" filterBy="#{inv.investigacion.nomInvest}" filterMatchMode="contains">
                         <h:outputText value="#{inv.investigacion.nomInvest}" />
                     </p:column>
-                    <p:column headerText="Titulo de investigación de vector">
+                    <p:column headerText="Titulo de investigación de vector" filterBy="#{inv.tituloInv}" filterMatchMode="contains" >
                         <h:outputText value="#{inv.tituloInv}" />
                     </p:column>
-                    <p:column headerText="Descripción">
+                    <p:column headerText="Descripción" filterBy="#{inv.descInvVector}" filterMatchMode="contains" >
                         <h:outputText value="#{inv.descInvVector}" /> 
                     </p:column>
                     <p:column headerText="Fecha Registro">
@@ -53,7 +63,7 @@
             <p:dialog header="Investigación registrada" widgetVar="dialogoConsultar" id="dlg_consultar" resizable="false" modal="true">
                 <p:scrollPanel  style="height: 500px;width: 1000px;">
 
-                      <p:panel header="Investigación de vector" id="panel_consultar">
+                    <p:panel header="Investigación de vector" id="panel_consultar">
                         <h:panelGrid columns="1" cellpadding="10"> 
                             <p:column>
                                 <p:outputLabel value="Vector a estudiar: "/>
@@ -166,5 +176,11 @@
                 </p:panel>
             </p:dialog>
         </h:form>   
+        <!-- INICIO DIALOGO DEFAULT -->
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            Procesando...
+        </p:dialog> 
+        <!-- FIN DIALOGO DEFAULT -->
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
     </ui:define>
 </ui:composition>

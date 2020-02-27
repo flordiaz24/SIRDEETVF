@@ -35,12 +35,12 @@
                     Preservantes registrados
                 </f:facet>
                 <p:column headerText="ID">
-                    <h:outputText value="#{preservante.idPreservante}" />
+                    <h:outputText value="#{preservante.idPreservante}"  />
                 </p:column>
-                <p:column headerText="Nombre">
+                <p:column headerText="Nombre" filterBy="#{preservante.nomPreservante}" filterMatchMode="contains">
                     <h:outputText value="#{preservante.nomPreservante}" />
                 </p:column>
-                <p:column headerText="Descripcion">
+                <p:column headerText="Descripcion" filterBy="#{preservante.descPreservante}" filterMatchMode="contains" >
                     <h:outputText value="#{preservante.descPreservante}" />
                 </p:column>
                 <p:column headerText="Acciones">

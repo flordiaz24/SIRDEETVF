@@ -10,23 +10,32 @@
         <h:form id="F01">
             <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
             <p:panel>
+                <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                             layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                    <p:outputLabel for="calendar" value="Fecha inicial"/>
+                    <p:calendar pattern="dd/MM/yyyy" id="calendar" value="#{mbInvestigacion.fechaIni}" maxdate="today" required="true" requiredMessage="Ingrese fecha inicial"/>
+                    <p:outputLabel for="calendar2" value="Fecha final"/>
+                    <p:calendar pattern="dd/MM/yyyy" id="calendar2" value="#{mbInvestigacion.fechaFin}" maxdate="today" required="true" requiredMessage="Ingrese fecha final" />
+                    <p:commandButton id="cargar" value="Buscar" icon="ui-icon-search"  actionListener="#{mbInvestigacion.buscar_investigaciones_entre_fechas()}" update="@form"/>
+                </p:panelGrid>
+
                 <p:dataTable value="#{mbInvestigacion.lsInvestigacions}" id="x" var="investigacion" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     <f:facet name="header">
                         Investigaciones registradas
                     </f:facet>
-                    <p:column headerText="Laboratorio">
+                    <p:column headerText="Laboratorio" filterBy="#{investigacion.laboratorio.nomLab}" filterMatchMode="contains">
                         <h:outputText value="#{investigacion.laboratorio.nomLab}" />
                     </p:column>
-                    <p:column headerText="Nombre de investigacion">
+                    <p:column headerText="Nombre de investigacion" filterBy="#{investigacion.nomInvest}" filterMatchMode="contains">
                         <h:outputText value="#{investigacion.nomInvest}" />
                     </p:column>
-                    <p:column headerText="Estado de la investigacion">
+                    <p:column headerText="Estado de la investigacion" filterBy="#{investigacion.estadoInvest eq true ? 'activo' : 'completo'}" filterMatchMode="contains">
                         <h:outputText value="#{investigacion.estadoInvest eq true ? 'activo' : 'completo'  } " />
                     </p:column>
-                    <p:column headerText="Año">
+                    <p:column headerText="Año" filterBy="#{investigacion.anio}" filterMatchMode="contains">
                         <h:outputText value="#{investigacion.anio}" /> 
                     </p:column>
-                    <p:column headerText="Mes">
+                    <p:column headerText="Mes" filterBy= "#{investigacion.mes}" filterMatchMode="contains">
                         <h:outputText value="#{investigacion.mes}" /> 
                     </p:column>
                     <p:column headerText="Fecha registro">
@@ -200,7 +209,7 @@
                                                                itemLabel="#{labx.nomLab}"/>
                                                 <f:converter binding="#{converterLaboratorio}" />
                                             </p:selectOneMenu>
-                                            
+
                                             <p:outputLabel for="activo" value="Estado de investigación:"/>
                                             <p:selectBooleanButton  id="activo" value="#{mbInvestigacion.investigacionSeleccionada.estadoInvest}" onLabel="Activo" offLabel="Completo" />
 
@@ -505,5 +514,12 @@
         </h:form>   
         <br/>
         <br/>
+        <!--- INICIO DIALOGO DEFAULT -->
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            Procesando...
+        </p:dialog> 
+        <!-- FIN DIALOGO DEFAULT -->
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />     
+
     </ui:define>
 </ui:composition>

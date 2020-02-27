@@ -6,6 +6,7 @@
 package sv.ues.dao;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -184,6 +185,30 @@ public class InvestigacionDao {
         }finally{
         sesion.close();
         
+        }
+    }
+    /**
+     * Devuelte lista de investigaciones registrados entre dos fechas
+     * @param fechaIni
+     * @param fechaFin
+     * @return Lista de investigaciones
+     * @throws Exception 
+     */
+    public List<Investigacion> obtener_investigaciones_entre_fechas(Date fechaIni, Date fechaFin) throws Exception {
+        try{
+            iniciaOperacion();
+            String query = "Select inv FROM Investigacion inv WHERE inv.fechaCreacion BETWEEN :fechaIni AND :fechaFin ";
+            Query x = sesion.createQuery(query);
+            x.setParameter("fechaIni", fechaIni);
+            x.setParameter("fechaFin", fechaFin);
+
+            List<Investigacion> ls_inv = x.getResultList();
+            //sesion.close();
+            return ls_inv;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            sesion.close();
         }
     }
     

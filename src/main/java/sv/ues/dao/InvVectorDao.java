@@ -5,6 +5,7 @@
  */
 package sv.ues.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -118,6 +119,30 @@ public class InvVectorDao {
         } 
         finally 
         {
+            sesion.close();
+        }
+    }
+    /**
+     * Devuelte lista de inventario de vectores registrados entre dos fechas
+     * @param fechaIni
+     * @param fechaFin
+     * @return Lista de inventario de vectores
+     * @throws Exception 
+     */
+    public List<InvVector> obtener_inv_vectores_entre_fechas(Date fechaIni, Date fechaFin) throws Exception {
+        try{
+            iniciaOperacion();
+            String query = "Select iv FROM InvVector iv WHERE iv.fechaRegistro BETWEEN :fechaIni AND :fechaFin ";
+            Query x = sesion.createQuery(query);
+            x.setParameter("fechaIni", fechaIni);
+            x.setParameter("fechaFin", fechaFin);
+
+            List<InvVector> ls_in_vector = x.getResultList();
+            //sesion.close();
+            return ls_in_vector;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
             sesion.close();
         }
     }

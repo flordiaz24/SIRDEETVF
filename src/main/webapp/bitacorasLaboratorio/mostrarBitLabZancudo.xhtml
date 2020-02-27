@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Gestión Bitacora Laboratorio Zancudo</ui:define>
+
+    <ui:define name="content">
+        <h:form id="registros">
+            <p:growl id="mensaje" showDetail="true" showSummary="true" sticky="false" life="3000" />
+            <p:dataTable emptyMessage="No se han encontrado registros" widgetVar="tabla"  value="#{mbBitLabZancudo.lsBLabZancudo}" id="x" var="bitLabZan" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                <f:facet name="header">
+                    Bitácoras Laboratorio Zancudo Registradas
+                </f:facet>
+                <p:column headerText="Fecha de colecta" filterBy="#{bitLabZan.codBitLab}" filterMatchMode="contains">
+                    <h:outputText value="20/02/20" />
+                </p:column>
+                <p:column headerText="Nombre jefe de familia" filterBy="#{bitLabZan.nomBitLab}" filterMatchMode="contains">
+                    <h:outputText value="#{bitLabZan.nomBitLab}" />
+                </p:column>
+                <p:column headerText="Nombre científico" filterBy="#{bitLabZan.nomBitLab}" filterMatchMode="contains">
+                    <h:outputText value="#{bitLabZan.nomBitLab}" />
+                </p:column>
+                <p:column headerText="Código de orden" filterBy="#{bitLabZan.nomBitLab}" filterMatchMode="contains">
+                    <h:outputText value="#{bitLabZan.nomBitLab}" />
+                </p:column>
+                <p:column headerText="Género de la muestra" filterBy="#{bitLabZan.nomBitLab}" filterMatchMode="contains">
+                    <h:outputText value="#{bitLabZan.nomBitLab}" />
+                </p:column>
+                <p:column headerText="Número  de Epperdorf" filterBy="#{bitLabZan.nomBitLab}" filterMatchMode="contains">
+                    <h:outputText value="#{bitLabZan.nomBitLab}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <div align="center">
+                        <p:commandButton value="Consultar" class="blue-grey-btn" actionListener="#{mbBitLabZancudo.setBitLabZancudoSelec(bitLabZan)}" oncomplete="PF('dialogoConsultar').show();" update="formulario_consultar:dlg_consultar" />
+                        <p:spacer height="10" width="10" />
+                        <p:commandButton value="Modificar" class="orange-btn" actionListener="#{mbBitLabZancudo.setBitLabZancudoSelec(bitLabZan)}" oncomplete="PF('dialogoModificar').show();" update="formulario_modificar:dlgMod" />
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <h:form id="formulario_consultar">
+            <p:dialog header="Bitácora registrada" widgetVar="dialogoConsultar" id="dlg_consultar" resizable="false" modal="true">
+                <p:scrollPanel  style="height: auto;width: 1000px;">
+                    <p:panel header="Datos generales" id="panel_consultar">
+                        <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                            <p:column >
+                                <h:outputText value="Fecha de colecta: "/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Nombre del jefe de familia: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Nombre científico: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style=" font-style: italic; font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Código de orden: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Género de la muestra: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Número de Eppendorf: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Tipo de vigilancia: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Código de trampa: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Lugar de captura: " />
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.nomBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Localizacion">
+                        <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                            <p:column >
+                                <h:outputText value="Departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo departamento:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo municipio:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Colonia/Canton:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Codigo colonia/canton:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Latitud:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Longitud:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="Altitud:"/>
+                                <p:spacer height="10" width="10" />
+                                <h:outputText value="#{mbBitLabZancudo.bitLabZancudoSelec.codBitLab}" style="font-weight: bold;"/>
+                            </p:column>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:scrollPanel >
+            </p:dialog>
+        </h:form>
+        <h:form id="formulario_modificar">
+            <p:growl id="mensaje_modificar_datos_personales" showDetail="true" sticky="false" life="4000"/>
+            <p:dialog header="Modificar" widgetVar="dialogoModificar" id="dlgMod" resizable="false" modal="true" onHide="PF('wiz').loadStep('general',false)">
+
+                <p:panel style="border: none !important;" id="panel_modificar" >
+                    <p:wizard widgetVar="wiz" id="registro" style="width: 1000px;" flowListener="#{mbBitLabZancudo.flujoModificar}">
+                        <p:tab id="general" title="Datos Generales" >
+                            <p:growl id="mensaje_personal" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                            <p:panel>
+                                <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Fecha de colecta: " />
+                                        <p:calendar id="fecha_colecta" value="TEST"  style="width: 33%" mindate="today" showOn="button" pattern="dd/MM/yyyy" mask="true" required="true" requiredMessage="Seleccione la fecha de colecta"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Nombre jefe de familia: " />
+                                        <p:inputText value="TEST1" required="true" requiredMessage="Digite el nombre del jefe de familia" maxlength="50" validatorMessage="El nombre debe tener al menos 3 caracteres">
+                                            <f:validateLength minimum="3" />
+                                            <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                        </p:inputText><br/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Nombre cientifico: " />
+                                        <p:inputText id="txtnomcie" value="TEST2" style=" font-style: italic;"  required="true" requiredMessage="Digite el nombre Cientifico"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Codigo de orden:" />
+                                        <p:inputText id="txtOrden" value="TEST3" required="true" requiredMessage="Digite el codigo de orden"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Genero de la muestra: " />
+                                        <p:selectOneRadio value="tests" id="console" unselectable="false"  required="true" requiredMessage="Elija el genero de la muestra">
+                                            <f:selectItem itemLabel="Hembra" itemValue="Hembra" />
+                                            <f:selectItem itemLabel="Macho" itemValue="Macho" />
+                                        </p:selectOneRadio>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Numero de Eppendorf:" />
+                                        <p:inputNumber id="numero_Epp" value="3" minValue="0" decimalPlaces="0" required="true" requiredMessage="Digite el numero de Eppendorf"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Tipo de vigilancia:" />
+                                        <p:selectOneMenu value="TEST4">
+                                            <f:selectItem itemLabel=" Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="test4" var="tm" itemValue="1" itemLabel="2" />
+                                        </p:selectOneMenu><br/>  
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Codigo de trampa:" />
+                                        <p:inputText id="txtTrampa" value="TEST3" required="true" requiredMessage="Digite el codigo de trampa"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel value="Lugar de captura: " />
+                                        <p:selectOneRadio value="TEST5" id="consoleE" unselectable="false" required="true" requiredMessage="Elija el lugar de captura" >
+                                            <f:selectItem itemLabel="Domiciliar" itemValue="Domiciliar" />
+                                            <f:selectItem itemLabel="Peridomiciliar" itemValue="Peridomiciliar" />
+                                            <f:selectItem itemLabel="Silvestre" itemValue="Silvestre" />
+                                        </p:selectOneRadio>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:panel>  
+                        </p:tab>
+
+                        <p:tab id="localizacion" title="Domicilio">
+                            <p:growl id="mensaje_domicilio" showDetail="true" showSummary="false" sticky="false" life="4000"/>
+                            <p:panel>
+                                <h:panelGrid columns="3" cellpadding="10" width="100% !important">
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <h:outputLabel id="lb_depto" value="Departamento:" class="label" style="margin-bottom: 0px;"/>
+                                        <p:selectOneMenu id="som_depto" value="SAN VICENTE" >
+                                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="SANVI" />
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Codigo departamento:" />
+                                        <p:inputText id="txt_depto" style="width: 33%" value="10">
+                                        </p:inputText>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <h:outputLabel id="lb_muni" value="Municipio" class="label" style="margin-bottom: 0px;"/>
+                                        <p:selectOneMenu  id="som_muni" value="APAST"  >
+                                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="APASTEPEQUE"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Codigo municipio:" />
+                                        <p:inputText id="txt_muni" style="width: 33%" value="1001">
+                                        </p:inputText>
+                                    </h:panelGrid> 
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <h:outputLabel id="lb_colonia" value="Colonia/Canton:" class="label" style="margin-bottom: 0px;"/>
+                                        <p:selectOneMenu id="som_colonia" value="CASCO URBANO">
+                                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="CASCO URBANO"/>
+                                            <p:ajax update="txt_colonia" event="change"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Codigo Colonia/Canton :" />
+                                        <p:inputText id="txt_colonia" style="width: 33%" value="1456">
+                                        </p:inputText>
+                                    </h:panelGrid> 
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel for="latitud" value="Latitud"/>
+                                        <!-- <h:panelGroup styleClass="md-inputfield">-->
+                                        <p:inputText id="latitud" value="LAT"/>
+                                        <!--<label>Latitud</label>-->
+                                        <!-- </h:panelGroup>-->
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel for="longitud" value="Longitud"/>
+                                        <!--<h:panelGroup styleClass="md-inputfield">-->
+                                        <p:inputText id="longitud" value="LONG"/>
+                                        <!--<label>Latitud</label>-->
+                                        <!--</h:panelGroup>-->
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                        <p:outputLabel for="altitud" value="Altitud"/>
+                                        <!--<h:panelGroup styleClass="md-inputfield">-->
+                                        <p:inputText id="altitud" value="ALT"/>
+                                        <!--<label>Latitud</label>-->
+                                        <!--</h:panelGroup>-->
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:tab>
+
+                        <p:tab id="confirmar" title="Confirmar">
+                            <p:scrollPanel style="height: 300px;border: none !important;">
+                                <p:panel header="Datos Generales">
+                                    <h:panelGrid columns="3" cellpadding="2" width="100% !important">
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Fecha de colecta: " />
+                                            <h:outputText value="13/02/2020" style="font-weight: bold;">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </h:outputText>
+                                        </h:panelGrid>  
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Nombre jefe de familia: " />
+                                            <h:outputText value="TEST1" style="font-weight: bold;">
+                                                <p:keyFilter regEx="/[a-zA-Z]/i" />
+                                            </h:outputText>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Nombre cientifico: " />
+                                            <h:outputText value="TEST2" style=" font-style: italic; font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Codigo de orden:"/>
+                                            <p:inputText value="TEST3"  style="font-weight: bold;" />
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Genero de la muestra: " />
+                                            <h:outputText value="tests" style="font-weight: bold;"/>    
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Numero de Eppendorf:" />
+                                            <h:outputText value="3" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Tipo de vigilancia:" />
+                                            <h:outputText value="TEST4" style="font-weight: bold;"/>  
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Codigo de trampa:" />
+                                            <h:outputText value="TEST3" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Lugar de captura: " />
+                                            <h:outputText value="TEST5" style="font-weight: bold;" />
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:panel header="Localizacion">
+                                    <h:panelGrid columns="3"  cellpadding="2" width="100% !important">
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Departamento:"/>
+                                            <h:outputText value="San Vicente" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Codigo departamento:"/>
+                                            <h:outputText value="1011" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Municipio:"/>
+                                            <h:outputText value="Apastepeque" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Codigo municipio:"/>
+                                            <h:outputText value="1010" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Colonia/Canton:"/>
+                                            <h:outputText value="San Francisco" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel value="Codigo colonia/canton:"/>
+                                            <h:outputText value="1540" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel for="latitud" value="Latitud"/>
+                                            <h:outputText value="LAT" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel for="longitud" value="Longitud"/>
+                                            <h:outputText value="LONG" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" cellpadding="2" width="100% !important">
+                                            <p:outputLabel for="altitud" value="Altitud"/>
+                                            <h:outputText value="ALT" style="font-weight: bold;"/>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:panel>    
+                            </p:scrollPanel>    
+                            <p:commandButton oncomplete="PF('wiz').loadStep('general',false)" actionListener="#{mbBitLabZancudo.modificarBitacoraLabZancudo()}" style="float: right;" class="orange-btn" update="mensaje_modificar_datos_personales" value="Modificar" ajax="true" icon="ui-icon-plus" />    
+                            <br/><br/>
+                        </p:tab>
+                    </p:wizard>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+        <!-- INICIO DIALOGO DEFAULT -->
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            Procesando...
+        </p:dialog> 
+        <!-- FIN DIALOGO DEFAULT -->
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+    </ui:define>
+</ui:composition>

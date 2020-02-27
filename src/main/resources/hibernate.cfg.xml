@@ -43,15 +43,14 @@ Contributor(s):
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://35.197.58.186:5432/sirdeetvProd</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/sirdeetv</property>
     <property name="hibernate.connection.username">postgres</property>
-    <property name="hibernate.connection.password">1234</property>
-<mapping resource="sv/ues/dominio/Orden.hbm.xml"/>
-<mapping resource="sv/ues/dominio/Familia.hbm.xml"/>
-
+    <property name="hibernate.connection.password">root</property>
+    <mapping resource="sv/ues/dominio/Orden.hbm.xml"/>
+    <mapping resource="sv/ues/dominio/Familia.hbm.xml"/>
     <mapping resource="sv/ues/dominio/Actividad01.hbm.xml"/>
     <mapping resource="sv/ues/dominio/ActividadEncabezado.hbm.xml"/>
-     <mapping resource="sv/ues/dominio/Cargo.hbm.xml"/>
+    <mapping resource="sv/ues/dominio/Cargo.hbm.xml"/>
     <mapping resource="sv/ues/dominio/Menu.hbm.xml"/>
     <mapping resource="sv/ues/dominio/Cacerio.hbm.xml"/>
     <mapping resource="sv/ues/dominio/AnalisisLab.hbm.xml"/>
